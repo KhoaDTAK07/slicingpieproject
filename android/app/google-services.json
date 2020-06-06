@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "665095419689",
+    "firebase_url": "https://swdslicingpie-59d47.firebaseio.com",
+    "project_id": "swdslicingpie-59d47",
+    "storage_bucket": "swdslicingpie-59d47.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665095419689:android:4e101bc7831cbf18506938",
+        "android_client_info": {
+          "package_name": "khoa.example.slicingpieproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "665095419689-mj35k18cnj3atdcgb7jneg85a2dv20ie.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "khoa.example.slicingpieproject",
+            "certificate_hash": "abd3c5aa44cc93f500a588f434e81679ae6e4f5a"
+          }
+        },
+        {
+          "client_id": "665095419689-el61qeu2hdhl4vi5a3ui4bagnjo5dsh8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSF7lWUDyUnR0MdG2I7M-pWsEbibCiUr8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665095419689-el61qeu2hdhl4vi5a3ui4bagnjo5dsh8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
