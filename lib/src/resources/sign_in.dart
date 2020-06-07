@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
 
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -33,10 +30,6 @@ Future<String> signInWithGoogle() async {
   IdTokenResult idToken = await currentUser.getIdToken(refresh: true);
   firebaseToken = idToken.token;
 
-  return firebaseToken;
-}
-
-String getToken() {
   return firebaseToken;
 }
 

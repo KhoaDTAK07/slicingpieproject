@@ -5,6 +5,7 @@ import 'package:slicingpieproject/src/resources/sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:slicingpieproject/src/stakeholder/stakeholder_model.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -13,11 +14,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  int statusCode;
   String jsonList;
   StakeHolderList stakeHolderList;
 
   _makeLoginPostRequest() async {
-
+    String firebaseToken = await signInWithGoogle();
     // set up POST request arguments
     String urlAPI = 'https://slicingpieproject.azurewebsites.net/api/login';
     String urlAPIGetList = 'https://slicingpieproject.azurewebsites.net/api/StackHolders';
@@ -46,6 +48,9 @@ class _LoginPageState extends State<LoginPage> {
 
     jsonList = responseGet.body;
     List<dynamic> list = jsonDecode(responseGet.body);
+    if (!list.isEmpty){
+      statusCode = 200;
+    }
 
     stakeHolderList = StakeHolderList.fromJson(list);
 
@@ -115,14 +120,26 @@ class _LoginPageState extends State<LoginPage> {
                   height: 52,
                   child: RaisedButton(
                     onPressed: () {
-//                      Route route = MaterialPageRoute(builder: (context) => HomePage());
-//                      Navigator.push(context, route);
-                      signInWithGoogle().whenComplete(() {
-                        _makeLoginPostRequest();
+                      _makeLoginPostRequest().whenComplete(() {
+                        if(statusCode == 200){
                           Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => HomePage(list: stakeHolderList),
-                          ),
-                        );
+                            MaterialPageRoute(builder: (context) => HomePage(list: stakeHolderList),
+                            ),
+                          );
+                        }  else {
+                          signOutGoogle();
+                          Fluttertoast.showToast(
+                              msg: "Your Account is inactive",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.CENTER,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
+                          Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => LoginPage(),
+                              ));
+                        }
                       });
                     },
                     child: Text(

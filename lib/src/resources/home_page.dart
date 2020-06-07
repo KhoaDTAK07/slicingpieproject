@@ -1,16 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:slicingpieproject/src/stakeholder/stakeholder_model.dart';
 
 class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-
   final StakeHolderList list;
 
   HomePage({Key key, this.list}) : super(key: key);
+
+  @override
+  _HomePageState createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage>{
@@ -19,28 +17,28 @@ class _HomePageState extends State<HomePage>{
 
   @override
   Widget build(BuildContext context) {
-    int length = widget.list.stakeholderList.length;
+//    int length = widget.list.stakeholderList.length;
+//
+//    double calculatedTotalSlice(){
+//      double totalSlice = 0;
+//      for (int i =0; i < length; i++){
+//        totalSlice += widget.list.stakeholderList[i].sliceAssets;
+//      }
+//      return totalSlice;
+//    };
+//
+//    double calculatedPercentOfStakeHolder(String name){
+//      double result = 0, totalSlice = calculatedTotalSlice();
+//      for (int i =0; i < length; i++){
+//        if (widget.list.stakeholderList[i].shName == name){
+//          result = (widget.list.stakeholderList[i].sliceAssets / totalSlice) * 100;
+//        }
+//      }
+//      return result;
+//    }
 
-    double calculatedTotalSlice(){
-      double totalSlice = 0;
-      for (int i =0; i < length; i++){
-        totalSlice += widget.list.stakeholderList[i].sliceAssets;
-      }
-      return totalSlice;
-    };
-
-    double calculatedPercentOfStakeHolder(String name){
-      double result = 0, totalSlice = calculatedTotalSlice();
-      for (int i =0; i < length; i++){
-        if (widget.list.stakeholderList[i].shName == name){
-          result = (widget.list.stakeholderList[i].sliceAssets / totalSlice) * 100;
-        }
-      }
-      return result;
-    }
-
-    double totalSlice = calculatedTotalSlice();
-    double totalPercent;
+//    double totalSlice = calculatedTotalSlice();
+//    double totalPercent;
 
     final tabController = new DefaultTabController(
         length: 2,
@@ -149,103 +147,121 @@ class _HomePageState extends State<HomePage>{
           ),
           body: new TabBarView(
               children: [
-                new Container(
-                  padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                  constraints: BoxConstraints.expand(),
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: <Widget>[
-                        SizedBox(
-                          height: 25,
-                        ),
-                        CircleAvatar(
-                          radius: 53.0,
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: NetworkImage(
-                                'https://media-exp1.licdn.com/dms/image/C4E03AQG7du-pU1O8kw/profile-displayphoto-shrink_200_200/0?e=1592438400&v=beta&t=GHaowcIAB7eDs5TlWiTKUqr1EXo_rBM1AsZh85AFcJg'
-                            ),
+                ListView.builder(
+                  itemCount: widget.list.stakeholderList.length,
+                  itemBuilder: (BuildContext context, index){
+                    return Container(
+                      padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                      child: Column(
+                        children: <Widget>[
+                          SizedBox(
+                            height: 25,
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Text(
-                            widget.list.stakeholderList[0].shName,
-                            style: TextStyle(fontSize: 18, color: Colors.black,),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 8, 0, 15),
-                          child: Text(
-                            widget.list.stakeholderList[0].shJob,
-                            style: TextStyle(fontSize: 18, color: Colors.black,),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Expanded(
-                              child: Text(
-                                'Slice',
-                                style: TextStyle(fontSize: 18, color: Colors.black),
-                              ),
-                              flex: 10,
-                            ),
-                            Expanded(
-                              child: Text(
-                                  '(43%)',
-                                style: TextStyle(fontSize: 18, color: Colors.black),
-                                textAlign: TextAlign.right,
-                              ),
-                              flex: 90,
-                            ),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: new Row(
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              Expanded(
-                                child: Container(
-                                  //width: totalSlice,
-                                  height: 10,
-                                  color: Colors.red,
+                              Container(
+                                padding: EdgeInsets.fromLTRB(140, 0, 0, 5),
+                                child: CircleAvatar(
+                                  radius: 53.0,
+                                  child: CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: NetworkImage(
+                                        'https://media-exp1.licdn.com/dms/image/C4E03AQG7du-pU1O8kw/profile-displayphoto-shrink_200_200/0?e=1592438400&v=beta&t=GHaowcIAB7eDs5TlWiTKUqr1EXo_rBM1AsZh85AFcJg'
+                                    ),
+                                  ),
                                 ),
-                                flex: 43,
-                              ),
-                              Expanded(
-                                child: Container(
-                                  //width: (totalPercent =  calculatedPercentOfStakeHolder(widget.list.stakeholderList[0].shName)),
-                                  height: 10,
-                                  color: Colors.blue,
-                                ),
-                                flex: 100 - 43,
                               ),
                             ],
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                          child: SizedBox(
-                            width: double.infinity,
-                            height: 52,
-                            child: RaisedButton(
-                              onPressed: () {},
-                              child: Text(
-                                'ADD CONTRIBUTION',
-                                style: TextStyle(color: Colors.white, fontSize: 18),
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(165, 5, 0, 5),
+                                child: Text(
+                                  widget.list.stakeholderList[index].shName,
+                                  style: TextStyle(fontSize: 18, color: Colors.black,),
+                                  textAlign: TextAlign.center,
+                                ),
                               ),
-                              color: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(Radius.circular(6)),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(165, 0, 0, 15),
+                                child: Text(
+                                  widget.list.stakeholderList[index].shJob,
+                                  style: TextStyle(fontSize: 18, color: Colors.black,),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: <Widget>[
+                              Expanded(
+                                child: Text(
+                                  'Slice',
+                                  style: TextStyle(fontSize: 18, color: Colors.black),
+                                ),
+                                flex: 10,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  '(43%)',
+                                  style: TextStyle(fontSize: 18, color: Colors.black),
+                                  textAlign: TextAlign.right,
+                                ),
+                                flex: 90,
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                            child: new Row(
+                              children: <Widget>[
+                                Expanded(
+                                  child: Container(
+                                    //width: totalSlice,
+                                    height: 10,
+                                    color: Colors.red,
+                                  ),
+                                  flex: 43,
+                                ),
+                                Expanded(
+                                  child: Container(
+                                    //width: (totalPercent =  calculatedPercentOfStakeHolder(widget.list.stakeholderList[0].shName)),
+                                    height: 10,
+                                    color: Colors.blue,
+                                  ),
+                                  flex: 100 - 43,
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: 52,
+                              child: RaisedButton(
+                                onPressed: () {},
+                                child: Text(
+                                  'ADD CONTRIBUTION',
+                                  style: TextStyle(color: Colors.white, fontSize: 18),
+                                ),
+                                color: Colors.red,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
 
                 Icon(Icons.directions_transit),
