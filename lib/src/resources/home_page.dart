@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:slicingpieproject/src/stakeholder/stakeholder_model.dart';
+import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   final StakeHolderList list;
@@ -17,28 +18,18 @@ class _HomePageState extends State<HomePage>{
 
   @override
   Widget build(BuildContext context) {
-//    int length = widget.list.stakeholderList.length;
-//
-//    double calculatedTotalSlice(){
-//      double totalSlice = 0;
-//      for (int i =0; i < length; i++){
-//        totalSlice += widget.list.stakeholderList[i].sliceAssets;
-//      }
-//      return totalSlice;
-//    };
-//
-//    double calculatedPercentOfStakeHolder(String name){
-//      double result = 0, totalSlice = calculatedTotalSlice();
-//      for (int i =0; i < length; i++){
-//        if (widget.list.stakeholderList[i].shName == name){
-//          result = (widget.list.stakeholderList[i].sliceAssets / totalSlice) * 100;
-//        }
-//      }
-//      return result;
-//    }
+    int length = widget.list.stakeholderList.length;
 
-//    double totalSlice = calculatedTotalSlice();
-//    double totalPercent;
+    double calculatedTotalSlice(){
+      double totalSlice = 0;
+      for (int i =0; i < length; i++){
+        totalSlice += widget.list.stakeholderList[i].sliceAssets;
+      }
+      return totalSlice;
+    };
+
+    var totalSlice = calculatedTotalSlice();
+    final formatter = new NumberFormat("(##,##%)");
 
     final tabController = new DefaultTabController(
         length: 2,
@@ -203,17 +194,24 @@ class _HomePageState extends State<HomePage>{
                               Expanded(
                                 child: Text(
                                   'Slice',
+                                  style: TextStyle(fontSize: 18, color: Colors.black,),
+                                ),
+                                flex: 40,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.fromLTRB(180, 0, 0, 0),
+                                child: Text(
+                                  widget.list.stakeholderList[index].sliceAssets.toString(),
                                   style: TextStyle(fontSize: 18, color: Colors.black),
                                 ),
-                                flex: 10,
                               ),
                               Expanded(
                                 child: Text(
-                                  '(43%)',
+                                  formatter.format((widget.list.stakeholderList[index].sliceAssets / totalSlice) * 100),
                                   style: TextStyle(fontSize: 18, color: Colors.black),
                                   textAlign: TextAlign.right,
                                 ),
-                                flex: 90,
+                                flex: 50,
                               ),
                             ],
                           ),
@@ -223,19 +221,18 @@ class _HomePageState extends State<HomePage>{
                               children: <Widget>[
                                 Expanded(
                                   child: Container(
-                                    //width: totalSlice,
                                     height: 10,
                                     color: Colors.red,
                                   ),
-                                  flex: 43,
+                                  flex: widget.list.stakeholderList[index].sliceAssets.round(),
                                 ),
                                 Expanded(
                                   child: Container(
-                                    //width: (totalPercent =  calculatedPercentOfStakeHolder(widget.list.stakeholderList[0].shName)),
+                                    width: 100,
                                     height: 10,
                                     color: Colors.blue,
                                   ),
-                                  flex: 100 - 43,
+                                  flex: 100 + widget.list.stakeholderList[index].sliceAssets.round(),
                                 ),
                               ],
                             ),
