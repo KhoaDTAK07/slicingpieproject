@@ -4,8 +4,10 @@ import 'package:slicingpieproject/src/resources/home_page.dart';
 import 'package:slicingpieproject/src/resources/sign_in.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:slicingpieproject/src/stakeholder/stakeholder_model.dart';
+import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:slicingpieproject/src/viewmodel/login_viewmodel.dart';
+import 'package:slicingpieproject/src/helper/api_string.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -18,11 +20,42 @@ class _LoginPageState extends State<LoginPage> {
   String jsonList;
   StakeHolderList stakeHolderList;
 
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final loginViewModel = LoginViewModel();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    // Catch user's email input data
+    emailController.addListener(() {
+      // Call emailSink to add data to Stream
+      loginViewModel.emailSink.add(emailController.text);
+    });
+
+    // Catch user's password input data
+    passwordController.addListener(() {
+      // Call passSink to add data to Stream
+      loginViewModel.passwordSink.add(passwordController.text);
+    });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+
+    loginViewModel.dispose();
+  }
+
+
   _makeLoginPostRequest() async {
     String firebaseToken = await signInWithGoogle();
     // set up POST request arguments
-    String urlAPI = 'https://slicingpieproject.azurewebsites.net/api/login';
-    String urlAPIGetList = 'https://slicingpieproject.azurewebsites.net/api/StackHolders';
+    String urlAPI = APIString.apiLogin();
+    String urlAPIGetList = APIString.apiGetListStakeHolder();
 
     Map<String, String> headersPost = {
       HttpHeaders.authorizationHeader: firebaseToken,
@@ -73,45 +106,67 @@ class _LoginPageState extends State<LoginPage> {
                 height: 100,
               ),
               Image.asset('banner.png'),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 40, 0, 20),
-                child: TextField(
-                  style: TextStyle(fontSize: 18, color: Colors.black,),
-                  decoration: InputDecoration(
-                    labelText: "Username",
-                    prefixIcon: Container(
-                      width: 5, child: Image.asset('ic_username.png'),
+              StreamBuilder<String>(
+                stream: loginViewModel.emailStream,
+                builder: (context, snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 40, 0, 10),
+                    child: TextFormField(
+                      controller: emailController,
+                      style: TextStyle(fontSize: 18, color: Colors.black,),
+                      decoration: InputDecoration(
+                        labelText: "Username *",
+                        errorText: snapshot.data,
+                        prefixIcon: Container(
+                          width: 5, child: Image.asset('ic_username.png'),
+                        ),
+                      ),
                     ),
-                  ),
-                ),
+                  );
+                }
               ),
-              TextField(
-                style: TextStyle(fontSize: 18, color: Colors.black),
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: "Password",
-                  prefixIcon: Container(
-                    width: 53, height: 30, child: Image.asset("ic_password.png"),
-                  ),
-                ),
+              StreamBuilder<String>(
+                stream: loginViewModel.passwordStream,
+                builder: (context, snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                    child: TextFormField(
+                      controller: passwordController,
+                      style: TextStyle(fontSize: 18, color: Colors.black,),
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        labelText: "Password *",
+                        errorText: snapshot.data,
+                        prefixIcon: Container(
+                          width: 5, child: Image.asset('ic_password.png'),
+                        ),
+                      ),
+                    ),
+                  );
+                }
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 30, 0, 5),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 52,
-                  child: RaisedButton(
-                    onPressed: () {},
-                    child: Text(
-                      "Sign In",
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+              StreamBuilder<bool>(
+                stream: loginViewModel.btnStream,
+                builder: (context, snapshot) {
+                  return Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 30, 0, 5),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: RaisedButton(
+                        onPressed: snapshot.data == true ? () {} : null,
+                        child: Text(
+                          "Sign In",
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                        color: Color(0xff3277DB),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                        ),
+                      ),
                     ),
-                    color: Color(0xff3277DB),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(6)),
-                    ),
-                  ),
-                ),
+                  );
+                }
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(0, 15, 0, 40),

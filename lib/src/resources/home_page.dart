@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:slicingpieproject/src/stakeholder/stakeholder_model.dart';
+import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:intl/intl.dart';
+import 'package:percent_indicator/percent_indicator.dart';
 
 class HomePage extends StatefulWidget {
   final StakeHolderList list;
@@ -126,7 +127,7 @@ class _HomePageState extends State<HomePage>{
             ),
           ),
           appBar: new AppBar(
-            title: new Text("Bug Company                  In Term 1"),
+            title: new Text("Bug Company"),
             bottom: new TabBar(
                 indicatorColor: Colors.blue,
                 indicatorWeight: 2.0,
@@ -216,25 +217,16 @@ class _HomePageState extends State<HomePage>{
                             ],
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                            child: new Row(
-                              children: <Widget>[
-                                Expanded(
-                                  child: Container(
-                                    height: 10,
-                                    color: Colors.red,
-                                  ),
-                                  flex: widget.list.stakeholderList[index].sliceAssets.round(),
-                                ),
-                                Expanded(
-                                  child: Container(
-                                    width: 100,
-                                    height: 10,
-                                    color: Colors.blue,
-                                  ),
-                                  flex: 100 + widget.list.stakeholderList[index].sliceAssets.round(),
-                                ),
-                              ],
+                            padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                            child: new LinearPercentIndicator(
+                              width: MediaQuery.of(context).size.width - 50,
+                              animation: true,
+                              lineHeight: 20.0,
+                              animationDuration: 2000,
+                              percent: 0.9,
+                              center: Text("90.0%"),
+                                linearStrokeCap: LinearStrokeCap.roundAll,
+                                progressColor: Colors.greenAccent,
                             ),
                           ),
                           Padding(

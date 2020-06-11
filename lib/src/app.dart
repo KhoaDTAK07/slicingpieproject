@@ -1,4 +1,5 @@
-import 'package:slicingpieproject/src/resources/login_page.dart';
+import 'package:slicingpieproject/src/view/companysetting_page.dart';
+import 'package:slicingpieproject/src/view/login_page.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -7,7 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: LoginPage()
+      home: CompanySettingPage()
     ); //Material App
   }
 }
