@@ -1,7 +1,12 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:slicingpieproject/src/helper/validation.dart';
+import 'package:slicingpieproject/src/helper/api_string.dart';
+import 'package:slicingpieproject/src/model/user.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginViewModel {
   final _emailSubject = BehaviorSubject<String>();
@@ -35,6 +40,35 @@ class LoginViewModel {
     }).listen((enable) {
           btnSink.add(enable);
     });
+  }
+
+  normalSignIn(String email, String pass) async {
+    String apiCheckFirebase = APIString.apiCheckFirebaseNormalLogin();
+    String apiLogin = APIString.apiLogin();
+
+    String json =  jsonEncode(User(email, pass).toJson());
+    print(json);
+
+    http.Response responseAPICheckFirebase = await http.post(apiCheckFirebase, body: json);
+    int statusCodePost = responseAPICheckFirebase.statusCode;
+
+    Map<String, dynamic> map1 = jsonDecode(responseAPICheckFirebase.body);
+    String tokenLogIn = map1['idToken'];
+
+    Map<String, String> headersPost = {
+      HttpHeaders.authorizationHeader: tokenLogIn,
+    };
+
+    http.Response responseAPILogin = await http.post(apiLogin, headers: headersPost);
+    Map<String, dynamic> map2 = jsonDecode(responseAPILogin.body);
+
+
+    print(responseAPICheckFirebase.body);
+    print("------------");
+    print(responseAPILogin.body);
+
+//    Future<dynamic> list = jsonDecode(response.body);
+//    return list;
   }
 
   dispose() {

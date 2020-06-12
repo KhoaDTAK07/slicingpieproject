@@ -1,13 +1,14 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:slicingpieproject/src/resources/home_page.dart';
-import 'package:slicingpieproject/src/resources/sign_in.dart';
+import 'package:slicingpieproject/src/model/sign_in_google_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:slicingpieproject/src/viewmodel/login_viewmodel.dart';
 import 'package:slicingpieproject/src/helper/api_string.dart';
+import 'package:slicingpieproject/src/model/user.dart';
 
 
 class LoginPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   int statusCode;
   String jsonList;
   StakeHolderList stakeHolderList;
+  String json,email,pass;
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -33,12 +35,14 @@ class _LoginPageState extends State<LoginPage> {
     emailController.addListener(() {
       // Call emailSink to add data to Stream
       loginViewModel.emailSink.add(emailController.text);
+      email = emailController.text;
     });
 
     // Catch user's password input data
     passwordController.addListener(() {
       // Call passSink to add data to Stream
       loginViewModel.passwordSink.add(passwordController.text);
+      pass = passwordController.text;
     });
   }
 
@@ -66,14 +70,14 @@ class _LoginPageState extends State<LoginPage> {
     Map<String, dynamic> map = jsonDecode(responsePost.body);
     String content = map['token'];
 
-    String tokenLogin = content;
+    String tokenLogIn = content;
 
     print(statusCodePost);
-    print('Token Login: ' + tokenLogin);
+    print('Token Login: ' + tokenLogIn);
 
     Map<String, String> headersGet = {
       HttpHeaders.contentTypeHeader: "application/json", // or whatever
-      HttpHeaders.authorizationHeader: "Bearer $tokenLogin",
+      HttpHeaders.authorizationHeader: "Bearer $tokenLogIn",
     };
     http.Response responseGet = await http.get(urlAPIGetList, headers: headersGet);
 
@@ -116,6 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(fontSize: 18, color: Colors.black,),
                       decoration: InputDecoration(
                         labelText: "Username *",
+                        hintText: "example@gmail.com",
                         errorText: snapshot.data,
                         prefixIcon: Container(
                           width: 5, child: Image.asset('ic_username.png'),
@@ -154,7 +159,9 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       height: 52,
                       child: RaisedButton(
-                        onPressed: snapshot.data == true ? () {} : null,
+                        onPressed: snapshot.data == true ? () {
+                          Future<dynamic> json = loginViewModel.normalSignIn(email.trim(), pass.trim());
+                        } : null,
                         child: Text(
                           "Sign In",
                           style: TextStyle(color: Colors.white, fontSize: 18),

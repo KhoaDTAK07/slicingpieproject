@@ -2,26 +2,20 @@ class Validation {
   static String validatePass(String pass) {
     if (pass == null) {
       return "Password can't be blank";
-    }
-
-    if(pass.length < 6) {
+    }else if(pass.length < 6) {
       return "Password require minimum 6 characters";
-    }
-
-    return null;
+    }else
+      return null;
   }
 
   static String validateEmail(String email) {
+    var isValid = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
     if (email == null) {
       return "Email can't be blank";
-    }
-
-    var isValid = RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
-    if(isValid) {
+    }else if(!isValid) {
       return "Email invalid.";
-    }
-
-    return null;
+    }else
+      return null;
   }
 
   static String validateCompanyName(String name) {
