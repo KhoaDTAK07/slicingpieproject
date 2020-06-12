@@ -45,31 +45,44 @@ class LoginViewModel {
   normalSignIn(String email, String pass) async {
     String apiCheckFirebase = APIString.apiCheckFirebaseNormalLogin();
     String apiLogin = APIString.apiLogin();
+    String apiGetList = APIString.apiGetListStakeHolder();
 
     String json =  jsonEncode(User(email, pass).toJson());
     print(json);
 
+    //Post API to check authen Firebase
     http.Response responseAPICheckFirebase = await http.post(apiCheckFirebase, body: json);
     int statusCodePost = responseAPICheckFirebase.statusCode;
 
     Map<String, dynamic> map1 = jsonDecode(responseAPICheckFirebase.body);
     String tokenLogIn = map1['idToken'];
 
+    //Post API Login to take token user
     Map<String, String> headersPost = {
       HttpHeaders.authorizationHeader: tokenLogIn,
     };
 
     http.Response responseAPILogin = await http.post(apiLogin, headers: headersPost);
     Map<String, dynamic> map2 = jsonDecode(responseAPILogin.body);
-
+    String tokenUser = map2['token'];
 
     print(responseAPICheckFirebase.body);
     print("------------");
-    print(responseAPILogin.body);
+    print(tokenUser);
 
-//    Future<dynamic> list = jsonDecode(response.body);
-//    return list;
+    //  Use token user to take list of StakeHolder
+    Map<String, String> headersGet = {
+      HttpHeaders.contentTypeHeader: "application/json", // or whatever
+      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
+    };
+    http.Response responseGet = await http.get(apiGetList, headers: headersGet);
+
+    String jsonList = responseGet.body;
+    List<dynamic> list = jsonDecode(responseGet.body);
+    print("List: " + jsonList);
   }
+
+
 
   dispose() {
     _emailSubject.close();

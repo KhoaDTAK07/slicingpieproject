@@ -7,7 +7,7 @@ class APIString {
   }
 
   static String apiGetListStakeHolder() {
-    String url = "https://slicingpieproject.azurewebsites.net/api/StackHolders";
+    String url = "https://slicingpieproject.azurewebsites.net/api/Companies/[CompanyID]/stake-holder";
     return url;
   }
 
