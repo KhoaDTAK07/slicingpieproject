@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CompanySettingPage extends StatefulWidget {
+  final Map<String, dynamic> company;
+
+  CompanySettingPage({Key key, this.company}) : super(key: key);
+
   @override
   _CompanySettingPageState createState() => _CompanySettingPageState();
 }
@@ -71,7 +75,7 @@ class _CompanySettingPageState extends State<CompanySettingPage> {
                 child: Row(
                   children: <Widget>[
                     Text(
-                      "Company Name: ",
+                      "Company Name",
                       style: TextStyle(color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -82,6 +86,7 @@ class _CompanySettingPageState extends State<CompanySettingPage> {
                 height: 60,
                 child: TextField(
                     decoration: InputDecoration(
+                      hintText: widget.company['companyName'],
                       border: new OutlineInputBorder(
                           borderSide: new BorderSide(color: Colors.teal)
                       ),
@@ -104,6 +109,7 @@ class _CompanySettingPageState extends State<CompanySettingPage> {
                 height: 60,
                 child: TextField(
                   decoration: InputDecoration(
+                    hintText: widget.company['nonCashMultiplier'].toString(),
                     border: new OutlineInputBorder(
                         borderSide: new BorderSide(color: Colors.teal)
                     ),
@@ -126,6 +132,7 @@ class _CompanySettingPageState extends State<CompanySettingPage> {
                 height: 60,
                 child: TextField(
                   decoration: InputDecoration(
+                    hintText: widget.company['cashMultiplier'].toString(),
                     border: new OutlineInputBorder(
                         borderSide: new BorderSide(color: Colors.teal)
                     ),

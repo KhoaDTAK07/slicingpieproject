@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
+import 'package:slicingpieproject/src/viewmodel/login_viewmodel.dart';
+import 'package:slicingpieproject/src/view/companysetting_page.dart';
 
 class HomePage extends StatefulWidget {
   final StakeHolderList list;
+  final String token;
 
-  HomePage({Key key, this.list}) : super(key: key);
+  HomePage({Key key, this.list, this.token}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -16,6 +19,14 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>{
   String shName,shJob,shImage,companyID;
   double sliceAssets;
+  Map<String, dynamic> company;
+
+  final loginViewModel = LoginViewModel();
+
+  Future<dynamic> getCompanyProfile() async {
+    company = await loginViewModel.getCompanyProfile(widget.list.stakeholderList[0].companyID, widget.token);
+    print(company);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +105,24 @@ class _HomePageState extends State<HomePage>{
                   },
                   leading: Icon(
                     Icons.history,
+                    color: Colors.black,
+                  ),
+                ),
+                ListTile(
+                  title: Text(
+                    'Company Setting',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
+                  onTap: () {
+                    getCompanyProfile().whenComplete(() => {
+                      Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => CompanySettingPage(company: company),
+                        ),
+                      ),
+                    });
+                  },
+                  leading: Icon(
+                    Icons.settings,
                     color: Colors.black,
                   ),
                 ),
@@ -223,10 +252,9 @@ class _HomePageState extends State<HomePage>{
                               animation: true,
                               lineHeight: 20.0,
                               animationDuration: 2000,
-                              percent: 0.9,
-                              center: Text("90.0%"),
-                                linearStrokeCap: LinearStrokeCap.roundAll,
-                                progressColor: Colors.greenAccent,
+                              percent: (widget.list.stakeholderList[index].sliceAssets / totalSlice),
+                              linearStrokeCap: LinearStrokeCap.roundAll,
+                              progressColor: Colors.greenAccent,
                             ),
                           ),
                           Padding(

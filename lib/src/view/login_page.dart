@@ -2,13 +2,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:slicingpieproject/src/resources/home_page.dart';
 import 'package:slicingpieproject/src/model/sign_in_google_model.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:slicingpieproject/src/viewmodel/login_viewmodel.dart';
-import 'package:slicingpieproject/src/helper/api_string.dart';
-import 'package:slicingpieproject/src/model/user.dart';
+
 
 
 class LoginPage extends StatefulWidget {
@@ -21,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   String jsonList;
   StakeHolderList stakeHolderList;
   String json,email,pass;
+  String userToken;
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -55,45 +53,20 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 
-  _makeLoginPostRequest() async {
-    String firebaseToken = await signInWithGoogle();
-    // set up POST request arguments
-    String urlAPI = APIString.apiLogin();
-    String urlAPIGetList = APIString.apiGetListStakeHolder();
-
-    Map<String, String> headersPost = {
-      HttpHeaders.authorizationHeader: firebaseToken,
-    };
-    http.Response responsePost = await http.post(urlAPI, headers: headersPost);
-
-    int statusCodePost = responsePost.statusCode;
-    Map<String, dynamic> map = jsonDecode(responsePost.body);
-    String content = map['token'];
-
-    String tokenLogIn = content;
-
-    print(statusCodePost);
-    print('Token Login: ' + tokenLogIn);
-
-    Map<String, String> headersGet = {
-      HttpHeaders.contentTypeHeader: "application/json", // or whatever
-      HttpHeaders.authorizationHeader: "Bearer $tokenLogIn",
-    };
-    http.Response responseGet = await http.get(urlAPIGetList, headers: headersGet);
-
-    int statusCodeGet = responseGet.statusCode;
-
-    jsonList = responseGet.body;
-    List<dynamic> list = jsonDecode(responseGet.body);
-    if (!list.isEmpty){
+  Future<dynamic> getListStakeHolderWithNormalSignIn() async {
+    stakeHolderList = await loginViewModel.normalSignIn(email.trim(), pass.trim());
+    userToken = loginViewModel.token();
+    if(stakeHolderList != null){
       statusCode = 200;
     }
+  }
 
-    stakeHolderList = StakeHolderList.fromJson(list);
-
-    print(statusCodeGet);
-    print('List: ' + jsonList);
-    print("Test: " + stakeHolderList.stakeholderList[2].shName);
+  Future<dynamic> getListStakeHolderWithGoogleSignIn() async {
+    stakeHolderList = await loginViewModel.googleSignIn();
+    userToken = loginViewModel.token();
+    if(stakeHolderList != null){
+      statusCode = 200;
+    }
   }
 
   @override
@@ -160,7 +133,27 @@ class _LoginPageState extends State<LoginPage> {
                       height: 52,
                       child: RaisedButton(
                         onPressed: snapshot.data == true ? () {
-                          Future<dynamic> json = loginViewModel.normalSignIn(email.trim(), pass.trim());
+                          getListStakeHolderWithNormalSignIn().whenComplete(() {
+                            print(statusCode);
+                            if(statusCode == 200){
+                              Navigator.push(context,
+                                MaterialPageRoute(builder: (context) => HomePage(list: stakeHolderList, token: userToken),
+                                ),
+                              );
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Your Account is inactive",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  backgroundColor: Colors.red,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0
+                              );
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => LoginPage(),
+                                  ));
+                            }
+                          });
                         } : null,
                         child: Text(
                           "Sign In",
@@ -182,10 +175,10 @@ class _LoginPageState extends State<LoginPage> {
                   height: 52,
                   child: RaisedButton(
                     onPressed: () {
-                      _makeLoginPostRequest().whenComplete(() {
+                      getListStakeHolderWithGoogleSignIn().whenComplete(() {
                         if(statusCode == 200){
                           Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => HomePage(list: stakeHolderList),
+                            MaterialPageRoute(builder: (context) => HomePage(list: stakeHolderList, token: userToken),
                             ),
                           );
                         }  else {

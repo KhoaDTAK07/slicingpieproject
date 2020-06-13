@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class StakeHolderList {
   final List<StakeHolder> stakeholderList;
 

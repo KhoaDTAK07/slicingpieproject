@@ -4,14 +4,22 @@ import 'dart:io';
 import 'package:rxdart/rxdart.dart';
 import 'package:slicingpieproject/src/helper/validation.dart';
 import 'package:slicingpieproject/src/helper/api_string.dart';
+import 'package:slicingpieproject/src/model/company_model.dart';
+import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:slicingpieproject/src/model/user.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:slicingpieproject/src/model/sign_in_google_model.dart';
 
 class LoginViewModel {
   final _emailSubject = BehaviorSubject<String>();
   final _passwordSubject = BehaviorSubject<String>();
   final _btnSubject = BehaviorSubject<bool>();
+
+  String stakeHolderID, companyID, role, tokenUser;
+  int statusCode;
+  StakeHolderList stakeHolderList;
+  Company company;
 
   var emailValidation = StreamTransformer<String, String>.fromHandlers(
     handleData: (email, sink){
@@ -42,10 +50,10 @@ class LoginViewModel {
     });
   }
 
-  normalSignIn(String email, String pass) async {
+  Future<StakeHolderList> normalSignIn(String email, String pass) async {
+
     String apiCheckFirebase = APIString.apiCheckFirebaseNormalLogin();
     String apiLogin = APIString.apiLogin();
-    String apiGetList = APIString.apiGetListStakeHolder();
 
     String json =  jsonEncode(User(email, pass).toJson());
     print(json);
@@ -64,25 +72,81 @@ class LoginViewModel {
 
     http.Response responseAPILogin = await http.post(apiLogin, headers: headersPost);
     Map<String, dynamic> map2 = jsonDecode(responseAPILogin.body);
-    String tokenUser = map2['token'];
+    tokenUser = map2['token'];
+    companyID = map2['companyId'];
 
     print(responseAPICheckFirebase.body);
     print("------------");
-    print(tokenUser);
+    print(companyID);
 
     //  Use token user to take list of StakeHolder
+    String apiGetList = APIString.apiGetListStakeHolder(companyID);
     Map<String, String> headersGet = {
       HttpHeaders.contentTypeHeader: "application/json", // or whatever
       HttpHeaders.authorizationHeader: "Bearer $tokenUser",
     };
     http.Response responseGet = await http.get(apiGetList, headers: headersGet);
+    print(responseGet.body);
 
-    String jsonList = responseGet.body;
     List<dynamic> list = jsonDecode(responseGet.body);
-    print("List: " + jsonList);
+
+    stakeHolderList = StakeHolderList.fromJson(list);
+    print("Test: " + stakeHolderList.stakeholderList[2].shName);
+    return stakeHolderList;
   }
 
+  Future<StakeHolderList> googleSignIn() async {
+    //Sign in with Google to get Firebase Token
+    String firebaseToken = await signInWithGoogle();
+    //Post API login to take a user's token
+    String apiLogin = APIString.apiLogin();
 
+    Map<String, String> headersPost = {
+      HttpHeaders.authorizationHeader: firebaseToken,
+    };
+    http.Response responseAPILogin = await http.post(apiLogin, headers: headersPost);
+
+    int statusCodePost = responseAPILogin.statusCode;
+    Map<String, dynamic> map = jsonDecode(responseAPILogin.body);
+    tokenUser = map['token'];
+    companyID = map['companyId'];
+
+    print(statusCodePost);
+    print('Token Login: ' + tokenUser);
+
+    //Use token user to take list of StakeHolder
+    String apiGetList = APIString.apiGetListStakeHolder(companyID);
+    Map<String, String> headersGet = {
+      HttpHeaders.contentTypeHeader: "application/json", // or whatever
+      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
+    };
+    http.Response responseGet = await http.get(apiGetList, headers: headersGet);
+    print(responseGet.body);
+
+    List<dynamic> list = jsonDecode(responseGet.body);
+
+    stakeHolderList = StakeHolderList.fromJson(list);
+    print("Test: " + stakeHolderList.stakeholderList[2].shName);
+    return stakeHolderList;
+  }
+
+  String token() {
+    String userToken = tokenUser;
+    return userToken;
+  }
+
+  Future<Map<String, dynamic>> getCompanyProfile(String companyID, String tokenUser) async {
+    // API get Company Profile
+    String apiGetCompanyProfile = APIString.apiCompanySetting(companyID);
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: "application/json", // or whatever
+      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
+    };
+    http.Response response = await http.get(apiGetCompanyProfile, headers: headers);
+
+    Map<String, dynamic> json = jsonDecode(response.body);
+    return json;
+  }
 
   dispose() {
     _emailSubject.close();
