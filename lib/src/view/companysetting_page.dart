@@ -1,44 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:slicingpieproject/src/viewmodel/company_setting_viewmodel.dart';
 
-class CompanySettingPage extends StatefulWidget {
-  final Map<String, dynamic> company;
+class CompanySettingPage extends StatelessWidget {
+  final CompanySettingViewModel model;
 
-  CompanySettingPage({Key key, this.company}) : super(key: key);
+  CompanySettingPage({Key key, this.model}) : super(key: key);
 
-  @override
-  _CompanySettingPageState createState() => _CompanySettingPageState();
-}
-
-class _CompanySettingPageState extends State<CompanySettingPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
-      appBar: new AppBar(
-        backgroundColor: Colors.blueAccent,
-        leading: Builder(
-          builder: (BuildContext context) {
-            return IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () {
+    return MaterialApp(
+      home: ScopedModel<CompanySettingViewModel>(
+        model: model,
+        child: Scaffold(
+          appBar: new AppBar(
+            backgroundColor: Colors.blueAccent,
+            leading: Builder(
+              builder: (BuildContext context) {
+                return IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
 
-                }
-            );
-          },
-        ),
-        title: new Text("Company Setting"),
-        actions: <Widget>[
-          RaisedButton(
-            onPressed: () {},
-            color: Colors.blueAccent,
-            child: Text(
-              "Save",
-              style: TextStyle(color: Colors.white, fontSize: 18),
+                    }
+                );
+              },
             ),
+            title: new Text("Company Setting"),
+            actions: <Widget>[
+              RaisedButton(
+                onPressed: () {},
+                color: Colors.blueAccent,
+                child: Text(
+                  "Save",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+              ),
+            ],
           ),
-        ],
+          body: CompanyDetail(),
+        ),
       ),
-      body: new Container(
+    );
+  }
+}
+
+class CompanyDetail extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    return ScopedModelDescendant<CompanySettingViewModel>(
+      builder: (context, child, model) => Container(
 //        padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
         constraints: BoxConstraints.expand(),
         color: Colors.white,
@@ -85,12 +97,12 @@ class _CompanySettingPageState extends State<CompanySettingPage> {
                 padding: const EdgeInsets.fromLTRB(10, 10, 10, 0),
                 height: 60,
                 child: TextField(
-                    decoration: InputDecoration(
-                      hintText: widget.company['companyName'],
-                      border: new OutlineInputBorder(
-                          borderSide: new BorderSide(color: Colors.teal)
-                      ),
+                  decoration: InputDecoration(
+                    hintText: model.company.name,
+                    border: new OutlineInputBorder(
+                        borderSide: new BorderSide(color: Colors.teal)
                     ),
+                  ),
                 ),
               ),
               Padding(
@@ -109,7 +121,7 @@ class _CompanySettingPageState extends State<CompanySettingPage> {
                 height: 60,
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: widget.company['nonCashMultiplier'].toString(),
+                    hintText: model.company.nonMultiplayer.toString(),
                     border: new OutlineInputBorder(
                         borderSide: new BorderSide(color: Colors.teal)
                     ),
@@ -132,7 +144,7 @@ class _CompanySettingPageState extends State<CompanySettingPage> {
                 height: 60,
                 child: TextField(
                   decoration: InputDecoration(
-                    hintText: widget.company['cashMultiplier'].toString(),
+                    hintText: model.company.multiplayer.toString(),
                     border: new OutlineInputBorder(
                         borderSide: new BorderSide(color: Colors.teal)
                     ),
@@ -176,4 +188,5 @@ class _CompanySettingPageState extends State<CompanySettingPage> {
       ),
     );
   }
+
 }

@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:slicingpieproject/src/resources/home_page.dart';
 import 'package:slicingpieproject/src/model/sign_in_google_model.dart';
+import 'package:slicingpieproject/src/view/home_page.dart';
 import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:slicingpieproject/src/viewmodel/home_page_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/login_viewmodel.dart';
 
 
@@ -18,11 +20,14 @@ class _LoginPageState extends State<LoginPage> {
   String jsonList;
   StakeHolderList stakeHolderList;
   String json,email,pass;
-  String userToken;
+  String tokenLogIn;
+  String userToken, companyID;
+
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final loginViewModel = LoginViewModel();
+
 
   @override
   void initState() {
@@ -52,19 +57,20 @@ class _LoginPageState extends State<LoginPage> {
     loginViewModel.dispose();
   }
 
-
-  Future<dynamic> getListStakeHolderWithNormalSignIn() async {
-    stakeHolderList = await loginViewModel.normalSignIn(email.trim(), pass.trim());
-    userToken = loginViewModel.token();
-    if(stakeHolderList != null){
+  Future<dynamic> normalSignIn() async {
+    tokenLogIn = await loginViewModel.normalSignIn(email.trim(), pass.trim());
+    if(tokenLogIn.length != 0){
       statusCode = 200;
     }
+
   }
 
-  Future<dynamic> getListStakeHolderWithGoogleSignIn() async {
-    stakeHolderList = await loginViewModel.googleSignIn();
-    userToken = loginViewModel.token();
-    if(stakeHolderList != null){
+  Future<dynamic> googleSignIn() async {
+    String json = await loginViewModel.googleSignIn();
+    Map<String, dynamic> map = jsonDecode(json);
+    userToken = map['token'];
+    companyID = map['companyId'];
+    if(userToken.length != 0){
       statusCode = 200;
     }
   }
@@ -133,11 +139,11 @@ class _LoginPageState extends State<LoginPage> {
                       height: 52,
                       child: RaisedButton(
                         onPressed: snapshot.data == true ? () {
-                          getListStakeHolderWithNormalSignIn().whenComplete(() {
+                          normalSignIn().whenComplete(() {
                             print(statusCode);
                             if(statusCode == 200){
                               Navigator.push(context,
-                                MaterialPageRoute(builder: (context) => HomePage(list: stakeHolderList, token: userToken),
+                                MaterialPageRoute(builder: (context) => HomePage(model: HomePageViewModel(tokenLogIn,1,companyID),),
                                 ),
                               );
                             } else {
@@ -175,10 +181,10 @@ class _LoginPageState extends State<LoginPage> {
                   height: 52,
                   child: RaisedButton(
                     onPressed: () {
-                      getListStakeHolderWithGoogleSignIn().whenComplete(() {
+                      googleSignIn().whenComplete(() {
                         if(statusCode == 200){
                           Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => HomePage(list: stakeHolderList, token: userToken),
+                            MaterialPageRoute(builder: (context) => HomePage(model: HomePageViewModel(tokenLogIn,2,companyID), userToken: userToken,),
                             ),
                           );
                         }  else {

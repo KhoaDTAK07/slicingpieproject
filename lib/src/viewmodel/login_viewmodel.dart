@@ -6,12 +6,15 @@ import 'package:slicingpieproject/src/helper/validation.dart';
 import 'package:slicingpieproject/src/helper/api_string.dart';
 import 'package:slicingpieproject/src/model/company_model.dart';
 import 'package:slicingpieproject/src/model/stakeholder_model.dart';
-import 'package:slicingpieproject/src/model/user.dart';
+import 'package:slicingpieproject/src/model/user_login_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:slicingpieproject/src/model/sign_in_google_model.dart';
+import 'package:scoped_model/scoped_model.dart';
+import 'package:slicingpieproject/src/repos/stakeholder_repo.dart';
+import 'package:slicingpieproject/src/repos/user_login_repo.dart';
 
-class LoginViewModel {
+class LoginViewModel extends Model{
   final _emailSubject = BehaviorSubject<String>();
   final _passwordSubject = BehaviorSubject<String>();
   final _btnSubject = BehaviorSubject<bool>();
@@ -20,6 +23,9 @@ class LoginViewModel {
   int statusCode;
   StakeHolderList stakeHolderList;
   Company company;
+
+  StakeHolderRepo stakeHolderRepo = StakeHolderRepoImp();
+  UserLoginRepo userRepo = UserLoginRepoImp();
 
   var emailValidation = StreamTransformer<String, String>.fromHandlers(
     handleData: (email, sink){
@@ -50,84 +56,18 @@ class LoginViewModel {
     });
   }
 
-  Future<StakeHolderList> normalSignIn(String email, String pass) async {
-
+  Future<String> normalSignIn(String email, String pass) async {
     String apiCheckFirebase = APIString.apiCheckFirebaseNormalLogin();
-    String apiLogin = APIString.apiLogin();
+    String json = jsonEncode(UserLogin(email, pass).toJson());
 
-    String json =  jsonEncode(User(email, pass).toJson());
-    print(json);
-
-    //Post API to check authen Firebase
-    http.Response responseAPICheckFirebase = await http.post(apiCheckFirebase, body: json);
-    int statusCodePost = responseAPICheckFirebase.statusCode;
-
-    Map<String, dynamic> map1 = jsonDecode(responseAPICheckFirebase.body);
-    String tokenLogIn = map1['idToken'];
-
-    //Post API Login to take token user
-    Map<String, String> headersPost = {
-      HttpHeaders.authorizationHeader: tokenLogIn,
-    };
-
-    http.Response responseAPILogin = await http.post(apiLogin, headers: headersPost);
-    Map<String, dynamic> map2 = jsonDecode(responseAPILogin.body);
-    tokenUser = map2['token'];
-    companyID = map2['companyId'];
-
-    print(responseAPICheckFirebase.body);
-    print("------------");
-    print(companyID);
-
-    //  Use token user to take list of StakeHolder
-    String apiGetList = APIString.apiGetListStakeHolder(companyID);
-    Map<String, String> headersGet = {
-      HttpHeaders.contentTypeHeader: "application/json", // or whatever
-      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
-    };
-    http.Response responseGet = await http.get(apiGetList, headers: headersGet);
-    print(responseGet.body);
-
-    List<dynamic> list = jsonDecode(responseGet.body);
-
-    stakeHolderList = StakeHolderList.fromJson(list);
-    print("Test: " + stakeHolderList.stakeholderList[2].shName);
-    return stakeHolderList;
+    String tokenLogIn = await userRepo.getUserToken(apiCheckFirebase, json);
+    print("tokenLogIn: " + tokenLogIn);
+    return tokenLogIn;
   }
 
-  Future<StakeHolderList> googleSignIn() async {
-    //Sign in with Google to get Firebase Token
-    String firebaseToken = await signInWithGoogle();
-    //Post API login to take a user's token
-    String apiLogin = APIString.apiLogin();
-
-    Map<String, String> headersPost = {
-      HttpHeaders.authorizationHeader: firebaseToken,
-    };
-    http.Response responseAPILogin = await http.post(apiLogin, headers: headersPost);
-
-    int statusCodePost = responseAPILogin.statusCode;
-    Map<String, dynamic> map = jsonDecode(responseAPILogin.body);
-    tokenUser = map['token'];
-    companyID = map['companyId'];
-
-    print(statusCodePost);
-    print('Token Login: ' + tokenUser);
-
-    //Use token user to take list of StakeHolder
-    String apiGetList = APIString.apiGetListStakeHolder(companyID);
-    Map<String, String> headersGet = {
-      HttpHeaders.contentTypeHeader: "application/json", // or whatever
-      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
-    };
-    http.Response responseGet = await http.get(apiGetList, headers: headersGet);
-    print(responseGet.body);
-
-    List<dynamic> list = jsonDecode(responseGet.body);
-
-    stakeHolderList = StakeHolderList.fromJson(list);
-    print("Test: " + stakeHolderList.stakeholderList[2].shName);
-    return stakeHolderList;
+  Future<String> googleSignIn() async {
+    String json = await userRepo.getUserTokenByGoogleSignIn();
+    return json;
   }
 
   String token() {

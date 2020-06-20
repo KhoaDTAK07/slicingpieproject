@@ -1,9 +1,10 @@
 
-class User {
+class UserLogin {
   String email,password;
   String returnSecureToken = "true";
+  String userToken;
 
-  User(
+  UserLogin(
     this.email,
     this.password,
   );
@@ -14,4 +15,10 @@ class User {
         "password": password,
         "returnSecureToken": returnSecureToken
       };
+
+//  factory User.fromJson(Map<String, dynamic> json) {
+//    return User (
+//
+//    );
+//  }
 }
