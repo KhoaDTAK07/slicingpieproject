@@ -166,122 +166,138 @@ class ListViewHome extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<HomePageViewModel>(
-      builder: (context, child, model) => Container(
-        child: ListView.builder(
-          itemCount: model.stakeHolderList.stakeholderList.length,
-          itemBuilder: (context, index){
-            return Container(
-              padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-              child: Column(
-                children: <Widget>[
-                  SizedBox(
-                    height: 25,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      builder: (context, child, model) {
+        if(model.isLoading){
+          return LoadingState();
+        } else {
+          return Container(
+            child: ListView.builder(
+              itemCount: model.stakeHolderList.stakeholderList.length,
+              itemBuilder: (context, index){
+                return Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  child: Column(
                     children: <Widget>[
-                      Container(
-                        padding: EdgeInsets.fromLTRB(140, 0, 0, 5),
-                        child: CircleAvatar(
-                          radius: 53.0,
-                          child: CircleAvatar(
-                            radius: 50,
-                            backgroundImage: NetworkImage(
-                                ''
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(140, 0, 0, 5),
+                            child: CircleAvatar(
+                              radius: 53.0,
+                              child: CircleAvatar(
+                                radius: 50,
+                                backgroundImage: NetworkImage(
+                                    ''
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(165, 5, 0, 5),
+                            child: Text(
+                              model.stakeHolderList.stakeholderList[index].shName,
+                              style: TextStyle(fontSize: 18, color: Colors.black,),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(165, 0, 0, 15),
+                            child: Text(
+                              model.stakeHolderList.stakeholderList[index].shJob,
+                              style: TextStyle(fontSize: 18, color: Colors.black,),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              'Slice',
+                              style: TextStyle(fontSize: 18, color: Colors.black,),
+                            ),
+                            flex: 40,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(180, 0, 0, 0),
+                            child: Text(
+                              model.stakeHolderList.stakeholderList[index].sliceAssets.toString(),
+                              style: TextStyle(fontSize: 18, color: Colors.black),
+                            ),
+                          ),
+                          Expanded(
+                            child: Text(
+                              model.getFormat((model.stakeHolderList.stakeholderList[index].sliceAssets / model.getTotalSlice()) * 100),
+                              style: TextStyle(fontSize: 18, color: Colors.black),
+                              textAlign: TextAlign.right,
+                            ),
+                            flex: 50,
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                        child: new LinearPercentIndicator(
+                          width: MediaQuery.of(context).size.width - 50,
+                          animation: true,
+                          lineHeight: 20.0,
+                          animationDuration: 2000,
+                          percent: (model.stakeHolderList.stakeholderList[index].sliceAssets / model.getTotalSlice()),
+                          linearStrokeCap: LinearStrokeCap.roundAll,
+                          progressColor: Colors.greenAccent,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 52,
+                          child: RaisedButton(
+                            onPressed: () {},
+                            child: Text(
+                              'ADD CONTRIBUTION',
+                              style: TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                            color: Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(Radius.circular(6)),
                             ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                  Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(165, 5, 0, 5),
-                        child: Text(
-                          model.stakeHolderList.stakeholderList[index].shName,
-                          style: TextStyle(fontSize: 18, color: Colors.black,),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(165, 0, 0, 15),
-                        child: Text(
-                          model.stakeHolderList.stakeholderList[index].shJob,
-                          style: TextStyle(fontSize: 18, color: Colors.black,),
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Text(
-                          'Slice',
-                          style: TextStyle(fontSize: 18, color: Colors.black,),
-                        ),
-                        flex: 40,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(180, 0, 0, 0),
-                        child: Text(
-                          model.stakeHolderList.stakeholderList[index].sliceAssets.toString(),
-                          style: TextStyle(fontSize: 18, color: Colors.black),
-                        ),
-                      ),
-                      Expanded(
-                        child: Text(
-                          model.getFormat((model.stakeHolderList.stakeholderList[index].sliceAssets / model.getTotalSlice()) * 100),
-                          style: TextStyle(fontSize: 18, color: Colors.black),
-                          textAlign: TextAlign.right,
-                        ),
-                        flex: 50,
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                    child: new LinearPercentIndicator(
-                      width: MediaQuery.of(context).size.width - 50,
-                      animation: true,
-                      lineHeight: 20.0,
-                      animationDuration: 2000,
-                      percent: (model.stakeHolderList.stakeholderList[index].sliceAssets / model.getTotalSlice()),
-                      linearStrokeCap: LinearStrokeCap.roundAll,
-                      progressColor: Colors.greenAccent,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: RaisedButton(
-                        onPressed: () {},
-                        child: Text(
-                          'ADD CONTRIBUTION',
-                          style: TextStyle(color: Colors.white, fontSize: 18),
-                        ),
-                        color: Colors.red,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(6)),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
-      ),
+                );
+              },
+            ),
+          );
+        }
+      }
     );
   }
+}
+
+class LoadingState extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
 }
 
 

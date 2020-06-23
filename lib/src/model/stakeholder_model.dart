@@ -1,5 +1,5 @@
 class StakeHolderList {
-  final List<StakeHolder> stakeholderList;
+  List<StakeHolder> stakeholderList;
 
   StakeHolderList({
     this.stakeholderList,

@@ -75,19 +75,6 @@ class LoginViewModel extends Model{
     return userToken;
   }
 
-  Future<Map<String, dynamic>> getCompanyProfile(String companyID, String tokenUser) async {
-    // API get Company Profile
-    String apiGetCompanyProfile = APIString.apiCompanySetting(companyID);
-    Map<String, String> headers = {
-      HttpHeaders.contentTypeHeader: "application/json", // or whatever
-      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
-    };
-    http.Response response = await http.get(apiGetCompanyProfile, headers: headers);
-
-    Map<String, dynamic> json = jsonDecode(response.body);
-    return json;
-  }
-
   dispose() {
     _emailSubject.close();
     _passwordSubject.close();

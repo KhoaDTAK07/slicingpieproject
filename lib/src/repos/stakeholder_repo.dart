@@ -23,8 +23,8 @@ class StakeHolderRepoImp implements StakeHolderRepo {
     };
 
     http.Response responseGet = await http.get(apiGetList, headers: headersGet);
-//    print("------------");
-//    print(responseGet.body);
+    print("------------");
+    print(responseGet.body);
 
     List<dynamic> list = jsonDecode(responseGet.body);
 

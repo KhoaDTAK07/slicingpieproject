@@ -16,7 +16,13 @@ class HomePageViewModel extends Model {
     return userDetail;
   }
 
-  StakeHolderList stakeHolderList;
+  StakeHolderList _stakeHolderList;
+  bool _isLoading = false;
+
+  StakeHolderList get stakeHolderList => _stakeHolderList;
+  bool get isLoading => _isLoading;
+
+
 
   HomePageViewModel(String tokenLogIn, int num, String companyID) {
     if(num == 1){
@@ -34,8 +40,8 @@ class HomePageViewModel extends Model {
 
   double getTotalSlice() {
     double total = 0;
-    for (int i = 0; i < stakeHolderList.stakeholderList.length; i++){
-      total += stakeHolderList.stakeholderList[i].sliceAssets;
+    for (int i = 0; i < _stakeHolderList.stakeholderList.length; i++){
+      total += _stakeHolderList.stakeholderList[i].sliceAssets;
     }
     return total;
   }
@@ -55,14 +61,19 @@ class HomePageViewModel extends Model {
 
 
   void loadListStakeHolderByNormalSignIn (String tokenLogIn) async {
-    UserDetail userDetail = await getUserDetail(tokenLogIn);
-    stakeHolderList = await stakeHolderRepo.stakeHolderList(userDetail.token, userDetail.companyID);
-    userToken = userDetail.token;
+    _isLoading = true;
     notifyListeners();
+    UserDetail userDetail = await getUserDetail(tokenLogIn);
+    _stakeHolderList = await stakeHolderRepo.stakeHolderList(userDetail.token, userDetail.companyID).whenComplete(() {
+      _stakeHolderList = stakeHolderList;
+      _isLoading = false;
+      userToken = userDetail.token;
+      notifyListeners();
+    });
   }
 
   void loadListStakeHolderByGoogleSignIn (String userToken, String companyID) async {
-    stakeHolderList = await stakeHolderRepo.stakeHolderList(userToken, companyID);
+    _stakeHolderList = await stakeHolderRepo.stakeHolderList(userToken, companyID);
     notifyListeners();
   }
 
