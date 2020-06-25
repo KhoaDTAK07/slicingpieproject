@@ -229,22 +229,14 @@ class ListViewHome extends StatelessWidget{
                               'Slice',
                               style: TextStyle(fontSize: 18, color: Colors.black,),
                             ),
-                            flex: 40,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(180, 0, 0, 0),
-                            child: Text(
-                              model.stakeHolderList.stakeholderList[index].sliceAssets.toString(),
-                              style: TextStyle(fontSize: 18, color: Colors.black),
-                            ),
+                            flex: 75,
                           ),
                           Expanded(
                             child: Text(
-                              model.getFormat((model.stakeHolderList.stakeholderList[index].sliceAssets / model.getTotalSlice()) * 100),
-                              style: TextStyle(fontSize: 18, color: Colors.black),
-                              textAlign: TextAlign.right,
+                              model.stakeHolderList.stakeholderList[index].sliceAssets.toString(),
+                              style: TextStyle(fontSize: 18, color: Colors.black,),
                             ),
-                            flex: 50,
+                            flex: 25,
                           ),
                         ],
                       ),
@@ -253,9 +245,10 @@ class ListViewHome extends StatelessWidget{
                         child: new LinearPercentIndicator(
                           width: MediaQuery.of(context).size.width - 50,
                           animation: true,
-                          lineHeight: 20.0,
+                          lineHeight: 25.0,
                           animationDuration: 2000,
                           percent: (model.stakeHolderList.stakeholderList[index].sliceAssets / model.getTotalSlice()),
+                          center: Text(model.getFormat((model.stakeHolderList.stakeholderList[index].sliceAssets / model.getTotalSlice()) * 100)),
                           linearStrokeCap: LinearStrokeCap.roundAll,
                           progressColor: Colors.greenAccent,
                         ),
@@ -277,6 +270,20 @@ class ListViewHome extends StatelessWidget{
                             ),
                           ),
                         ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              color: Colors.black12,
+                              width: double.infinity,
+                              height: 2,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
