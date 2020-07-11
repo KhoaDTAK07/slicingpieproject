@@ -91,12 +91,15 @@ class HomePage extends StatelessWidget{
                       onTap: () {
                         if(userToken == null){
                           Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => CompanySettingPage(model: CompanySettingViewModel(model.stakeHolderList.stakeholderList[0].companyID, model.userToken),),
+                            MaterialPageRoute(
+                              builder: (context) => CompanySettingPage(
+                                model: CompanySettingViewModel(model.stakeHolderList.stakeholderList[0].companyID),
+                              ),
                             ),
                           );
                         } else {
                           Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => CompanySettingPage(model: CompanySettingViewModel(model.stakeHolderList.stakeholderList[0].companyID, userToken),),
+                            MaterialPageRoute(builder: (context) => CompanySettingPage(model: CompanySettingViewModel(model.stakeHolderList.stakeholderList[0].companyID),),
                             ),
                           );
                         }

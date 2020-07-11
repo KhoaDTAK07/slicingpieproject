@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:slicingpieproject/src/model/user_login_detail_model.dart';
 import 'package:slicingpieproject/src/repos/stakeholder_repo.dart';
@@ -9,12 +10,6 @@ class HomePageViewModel extends Model {
   UserDetailRepo userDetailRepo = UserDetailRepoImp();
   StakeHolderRepo stakeHolderRepo = StakeHolderRepoImp();
   final formatter = new NumberFormat("(##,##%)");
-  String userToken;
-
-  Future<UserDetail> getUserDetail(String tokenLogIn) async {
-    UserDetail userDetail = await userDetailRepo.fetchUserLoginDetail(tokenLogIn);
-    return userDetail;
-  }
 
   StakeHolderList _stakeHolderList;
   bool _isLoading = false;
@@ -52,22 +47,25 @@ class HomePageViewModel extends Model {
     return result;
   }
 
-  Future<String> getUserToken (String tokenLogIn) async {
-    String userToken;
-    UserDetail userDetail = await getUserDetail(tokenLogIn);
-    userToken = userDetail.token;
-    return userToken;
-  }
-
 
   void loadListStakeHolderByNormalSignIn (String tokenLogIn) async {
     _isLoading = true;
     notifyListeners();
-    UserDetail userDetail = await getUserDetail(tokenLogIn);
-    _stakeHolderList = await stakeHolderRepo.stakeHolderList(userDetail.token, userDetail.companyID).whenComplete(() {
+
+    UserDetail userDetail = await userDetailRepo.fetchUserLoginDetail(tokenLogIn);
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("token", userDetail.token);
+    sharedPreferences.setString("stakeHolderID", userDetail.stakeHolderID);
+    sharedPreferences.setString("companyID", userDetail.companyID);
+    sharedPreferences.setString("role", userDetail.role.toString());
+
+    String token = sharedPreferences.getString("token");
+    String companyID = sharedPreferences.getString("companyID");
+
+    _stakeHolderList = await stakeHolderRepo.stakeHolderList(token, companyID).whenComplete(() {
       _stakeHolderList = stakeHolderList;
       _isLoading = false;
-      userToken = userDetail.token;
       notifyListeners();
     });
   }

@@ -1,13 +1,14 @@
 import 'dart:convert';
 
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slicingpieproject/src/model/company_model.dart';
 import 'package:slicingpieproject/src/repos/company_detail_repo.dart';
 
 class CompanySettingViewModel extends Model {
-  String token;
   CompanyRepo companyRepo = CompanyRepoImp();
   Company _company;
+  String tokenUser;
 
   Company get company => _company;
 
@@ -15,15 +16,16 @@ class CompanySettingViewModel extends Model {
 
   bool get isLoading => _isLoading;
 
-  CompanySettingViewModel(String companyID, String tokenUser) {
-    loadCompanyDetail(companyID, tokenUser);
+  CompanySettingViewModel(String companyID) {
+    loadCompanyDetail(companyID);
   }
 
-  void loadCompanyDetail(String companyID, String tokenUser) async {
-    token = tokenUser;
+  void loadCompanyDetail(String companyID) async {
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    tokenUser = sharedPreferences.getString("token");
     _isLoading = true;
     notifyListeners();
-    _company =
+
     await companyRepo.companyDetail(companyID, tokenUser).whenComplete(() {
       _company = company;
       _isLoading = false;
@@ -55,9 +57,9 @@ class CompanySettingViewModel extends Model {
 
     String json = jsonEncode(_company.toJson());
 
-    _company = await companyRepo.updateCompany(id, json, token);
+    _company = await companyRepo.updateCompany(id, json, tokenUser);
 
-    loadCompanyDetail(_company.id, token);
+    loadCompanyDetail(_company.id);
   }
 
 }

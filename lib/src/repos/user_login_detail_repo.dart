@@ -21,6 +21,7 @@ class UserDetailRepoImp implements UserDetailRepo {
 
     String apiLogin = APIString.apiLogin();
     http.Response responseAPILogin = await http.post(apiLogin, headers: headersPost);
+
     Map<String, dynamic> userDetail = jsonDecode(responseAPILogin.body);
 
     UserDetail userLogInDetail;
