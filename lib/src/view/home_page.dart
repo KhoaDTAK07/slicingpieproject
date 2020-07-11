@@ -93,13 +93,13 @@ class HomePage extends StatelessWidget{
                           Navigator.push(context,
                             MaterialPageRoute(
                               builder: (context) => CompanySettingPage(
-                                model: CompanySettingViewModel(model.stakeHolderList.stakeholderList[0].companyID),
+                                model: CompanySettingViewModel(),
                               ),
                             ),
                           );
                         } else {
                           Navigator.push(context,
-                            MaterialPageRoute(builder: (context) => CompanySettingPage(model: CompanySettingViewModel(model.stakeHolderList.stakeholderList[0].companyID),),
+                            MaterialPageRoute(builder: (context) => CompanySettingPage(model: CompanySettingViewModel(),),
                             ),
                           );
                         }

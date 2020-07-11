@@ -1,13 +1,15 @@
 class Company {
   String name, icon, id;
   int nonMultiplayer, multiplayer;
+  double cashPerSlice;
 
   Company({
     this.id,
     this.name,
     this.icon,
     this.nonMultiplayer,
-    this.multiplayer
+    this.multiplayer,
+    this.cashPerSlice,
   });
 
 
@@ -17,7 +19,8 @@ class Company {
         name: json['companyName'],
         icon: json['comapnyIcon'],
         nonMultiplayer: json['nonCashMultiplier'],
-        multiplayer: json['cashMultiplier']
+        multiplayer: json['cashMultiplier'],
+        cashPerSlice: json['cashPerSlice']
     );
   }
 
@@ -27,7 +30,8 @@ class Company {
         "CompanyName": name,
         "ComapnyIcon": icon,
         "NonCashMultiplier": nonMultiplayer,
-        "CashMultiplier": multiplayer
+        "CashMultiplier": multiplayer,
+        "CashPerSlice": cashPerSlice,
       };
 
 }
