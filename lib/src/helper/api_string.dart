@@ -54,5 +54,9 @@ class APIString {
     String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID + "/StakeHoler/" + stakeHolderID + "/Contribution";
     return url;
   }
+  static String apiGetContribution(String companyID) {
+    String url = 'https://slicingpiepj.azurewebsites.net/api/Companies/$companyID/Contribution';
+    return url;
+  }
 
 }
