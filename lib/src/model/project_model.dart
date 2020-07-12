@@ -5,10 +5,10 @@ class Project {
 
   factory Project.fromJson(Map<String, dynamic> json) {
     return Project(
-      projectID: json[''],
-      projectName: json[''],
-      projectStatus: json[''],
-      companyID: json[''],
+      projectID: json['projectId'],
+      projectName: json['projectName'],
+      projectStatus: json['projectStatus'],
+      companyID: json['companyId'],
     );
   }
 }

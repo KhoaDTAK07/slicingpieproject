@@ -2,19 +2,24 @@ import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slicingpieproject/src/model/stakeholder_model.dart';
+import 'package:slicingpieproject/src/model/term_model.dart';
 import 'package:slicingpieproject/src/model/user_login_detail_model.dart';
 import 'package:slicingpieproject/src/repos/stakeholder_repo.dart';
+import 'package:slicingpieproject/src/repos/term_repo.dart';
 import 'package:slicingpieproject/src/repos/user_login_detail_repo.dart';
 
 class HomePageViewModel extends Model {
   UserDetailRepo userDetailRepo = UserDetailRepoImp();
   StakeHolderRepo stakeHolderRepo = StakeHolderRepoImp();
+  TermRepo _termRepo = TermRepoImp();
   final formatter = new NumberFormat("(##,##%)");
 
   StakeHolderList _stakeHolderList;
+  TermList _termList;
   bool _isLoading = false;
 
   StakeHolderList get stakeHolderList => _stakeHolderList;
+  TermList get termList => _termList;
   bool get isLoading => _isLoading;
 
 
@@ -55,6 +60,7 @@ class HomePageViewModel extends Model {
     UserDetail userDetail = await userDetailRepo.fetchUserLoginDetail(tokenLogIn);
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("tokenLogIn", tokenLogIn);
     sharedPreferences.setString("token", userDetail.token);
     sharedPreferences.setString("stakeHolderID", userDetail.stakeHolderID);
     sharedPreferences.setString("companyID", userDetail.companyID);

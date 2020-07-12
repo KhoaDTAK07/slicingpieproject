@@ -2,10 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slicingpieproject/src/view/companysetting_page.dart';
+import 'package:slicingpieproject/src/view/list_term_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/company_setting_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/home_page_viewmodel.dart';
+import 'package:slicingpieproject/src/viewmodel/term_list_viewmodel.dart';
 
 import 'company-history-contribute-page.dart';
 
@@ -318,7 +321,14 @@ class ListViewHome extends StatelessWidget {
                         width: double.infinity,
                         height: 52,
                         child: RaisedButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(context,
+                              MaterialPageRoute(builder: (context) => ListTermPage(model: TermListViewModel(),
+                                                stakeHolderID: model.stakeHolderList.stakeholderList[index].shID,
+                                                stakeHolderName: model.stakeHolderList.stakeholderList[index].shName,),
+                              ),
+                            );
+                          },
                           child: Text(
                             'ADD CONTRIBUTION',
                             style: TextStyle(color: Colors.white, fontSize: 18),
@@ -353,6 +363,9 @@ class ListViewHome extends StatelessWidget {
       }
     });
   }
+
+
+
 }
 
 class LoadingState extends StatelessWidget {
