@@ -287,8 +287,7 @@ class AddContributionPage extends StatelessWidget {
                 style: TextStyle(fontSize: 18),
               ),
               iconSize: 28,
-              elevation:
-                  16, // để làm t list còn lại luôn cho m làm add thôi méo còn tg
+              elevation: 16,
             ),
           ],
         ));
