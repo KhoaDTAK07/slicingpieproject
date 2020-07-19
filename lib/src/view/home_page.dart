@@ -309,8 +309,7 @@ class ListViewHome extends StatelessWidget {
                             model.getTotalSlice()),
                         center: Text(model.getFormat((model.stakeHolderList
                                     .stakeholderList[index].sliceAssets /
-                                model.getTotalSlice()) *
-                            100)),
+                                model.getTotalSlice()) * 100)),
                         linearStrokeCap: LinearStrokeCap.roundAll,
                         progressColor: Colors.greenAccent,
                       ),

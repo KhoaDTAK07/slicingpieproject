@@ -16,6 +16,8 @@ class AddContributionViewmodel extends Model {
   TermRepo _termRepo = TermRepoImp();
   ProjectList _projectList;
   String accountID;
+  String stakeHolderId;
+
   int termId;
 
   ProjectList get projectList => _projectList;
@@ -46,16 +48,16 @@ class AddContributionViewmodel extends Model {
 
   String get selectedTypeContribute => _selectedTypeContribute;
 
-  AddContributionViewmodel(String stakeHolderName, int termID) {
+  AddContributionViewmodel(String stakeHolderName,String stakeHolderID, int termID) {
     loadAccount(stakeHolderName, termID);
     accountID = stakeHolderName;
+    stakeHolderId = stakeHolderID;
     termId = termID;
   }
 
   void loadAccount(String stakeHolderName, int termID) async {
     accountFieldController.text = stakeHolderName;
-    _projectList =
-    await _termRepo.getProjectList(termID.toString()).whenComplete(() {
+    _projectList = await _termRepo.getProjectList(termID.toString()).whenComplete(() {
       _projectList = projectList;
       _isLoading = false;
     });
@@ -167,7 +169,7 @@ class AddContributionViewmodel extends Model {
         description: _description.value,
         projectID: _idProject,
         companyID: companyID,
-        accountID: accountID,
+        accountID: stakeHolderId,
         quantity: int.parse(_quantity.value),
         termID: termId,
         timeAsset: _selectedDate.toString(),
@@ -178,7 +180,7 @@ class AddContributionViewmodel extends Model {
       print("--Add Json--");
       print(addJson);
 
-      return _addContributionRepo.addContribution(addJson, accountID);
+      return _addContributionRepo.addContribution(addJson, stakeHolderId);
     }
   }
 

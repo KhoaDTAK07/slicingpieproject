@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:slicingpieproject/src/view/company_contribution_detail_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
+import 'package:slicingpieproject/src/viewmodel/company_contribution_detail_viewmodel.dart';
 
 class CompanyHistoryContributePage extends StatelessWidget {
   final CompanyHistoryContributeViewModel companyHistory;
@@ -60,12 +62,23 @@ Widget getListContributionUI(BuildContext context, int index,
   return Container(
     padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
     color: (index % 2 == 0) ? Colors.white : Colors.black12,
-    child: CustomListItemTwo(
-      title: '${companyHistory.listContribute[index].typeAsset} Contribution',
-      subtitle: companyHistory.listContribute[index].timeAsset,
-      author: companyHistory.listContribute[index].namePerson,
-      quantity: companyHistory.listContribute[index].quantity.toString(),
-      project: companyHistory.listContribute[index].project,
+    child: GestureDetector(
+      onTap: () {
+        print(companyHistory.listContribute[index].assetId);
+        Navigator.push(context,
+          MaterialPageRoute(builder: (context) => CompanyContributionDetailPage(
+            model: CompanyContributionDetailViewModel(
+                companyHistory.listContribute[index].assetId,companyHistory.listContribute[index].namePerson),),
+          ),
+        ).then((value) => companyHistory.getAll());
+      },
+      child: CustomListItemTwo(
+        title: '${companyHistory.listContribute[index].typeAsset} Contribution',
+        subtitle: companyHistory.listContribute[index].timeAsset,
+        author: companyHistory.listContribute[index].namePerson,
+        quantity: companyHistory.listContribute[index].quantity.toString(),
+        project: companyHistory.listContribute[index].project,
+      ),
     ),
   );
 }
@@ -174,7 +187,7 @@ class CustomListItemTwo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: SizedBox(
-        height: 81,
+        height: 90,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[

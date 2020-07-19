@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slicingpieproject/src/model/contribute-list-model.dart';
@@ -9,6 +10,7 @@ class CompanyHistoryContributeViewModel extends Model {
   List<ContributeListModel> _listContribute;
 
   List<ContributeListModel> get listContribute => _listContribute;
+
 
   String tokenUser;
   String companyID;
@@ -37,4 +39,5 @@ class CompanyHistoryContributeViewModel extends Model {
     });
     notifyListeners();
   }
+
 }

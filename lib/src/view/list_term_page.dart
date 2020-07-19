@@ -83,7 +83,7 @@ class ListTermPage extends StatelessWidget {
             print(stakeHolderID);
             Navigator.push(context,
               MaterialPageRoute(builder: (context) =>
-                  AddContributionPage(model: AddContributionViewmodel(stakeHolderName, model.termList.termList[index].termID),
+                  AddContributionPage(model: AddContributionViewmodel(stakeHolderName, stakeHolderID, model.termList.termList[index].termID),
                                       dateFrom: model.termList.termList[index].termTimeFrom,
                                       dateTo: model.termList.termList[index].termTimeTo,),
               ),

@@ -294,7 +294,6 @@ class AddContributionPage extends StatelessWidget {
   }
 
   Widget _typeAssetListField() {
-    var _currencies = ['Sales', 'Marketing', 'Finance'];
     return Container(
         height: 50,
         width: 375,

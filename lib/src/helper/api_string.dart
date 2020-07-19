@@ -52,4 +52,14 @@ class APIString {
     return url;
   }
 
+  static String apiContributionDetail() {
+    String url = "https://slicingpiepj.azurewebsites.net/api/SliceAsset/";
+    return url;
+  }
+
+  static String apiUpdateContribution() {
+    String url = "https://slicingpiepj.azurewebsites.net/api/SliceAsset/";
+    return url;
+  }
+
 }
