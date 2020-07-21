@@ -22,6 +22,11 @@ class APIString {
     String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID + "/stake-holder";
     return url;
   }
+
+  static String apiAddStakeHolder() {
+    String url = "https://slicingpiepj.azurewebsites.net/api/StackHolders/company/";
+    return url;
+  }
   //------------------------------------------------------------------------------------------------------
 
   //---------------------------------- API Company -------------------------------------------------------

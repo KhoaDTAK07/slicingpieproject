@@ -5,9 +5,11 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slicingpieproject/src/view/companysetting_page.dart';
 import 'package:slicingpieproject/src/view/list_term_page.dart';
+import 'package:slicingpieproject/src/view/stakeHolder_add_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/company_setting_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/home_page_viewmodel.dart';
+import 'package:slicingpieproject/src/viewmodel/stakeHolder_add_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/term_list_viewmodel.dart';
 
 import 'company-history-contribute-page.dart';
@@ -200,6 +202,23 @@ class HomePage extends StatelessWidget {
                   Icon(Icons.directions_transit),
                 ],
               ),
+              floatingActionButton: FloatingActionButton(
+                onPressed: () async{
+                  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                  String tokenLogIn = sharedPreferences.getString("tokenLogIn");
+
+                  await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => StakeHolderAddPage(
+                        model: StakeHolderAddViewModel(),
+                      ),
+                    ),
+                  ).then((value) => model.loadListStakeHolderByNormalSignIn(tokenLogIn));
+                },
+                child: Icon(Icons.add),
+                backgroundColor: Colors.blue,
+              ),
             ),
           ),
         ),
@@ -314,10 +333,10 @@ class ListViewHome extends StatelessWidget {
                           percent: (model.stakeHolderList.stakeholderList[index]
                                   .sliceAssets /
                               model.getTotalSlice()),
-                          center: Text(model.getFormat((model.stakeHolderList
-                              .stakeholderList[index].sliceAssets /
-                                  model.getTotalSlice()) *
-                              100)),
+                          center: Text(
+                            ((model.stakeHolderList.stakeholderList[index].sliceAssets / model.getTotalSlice()) * 100).toStringAsFixed(2) + "%",
+                            style: TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
                           linearStrokeCap: LinearStrokeCap.roundAll,
                           progressColor: Colors.greenAccent,
                         ),
