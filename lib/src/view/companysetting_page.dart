@@ -15,6 +15,7 @@ class CompanySettingPage extends StatelessWidget {
       child: Scaffold(
         appBar: new AppBar(
           title: new Text("Company Setting"),
+          backgroundColor: Colors.blueAccent,
           actions: <Widget>[
             RaisedButton(
               onPressed: () {

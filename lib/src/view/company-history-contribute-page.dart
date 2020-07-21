@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_beautiful_popup/main.dart';
+import 'package:intl/intl.dart' as intl;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:slicingpieproject/src/view/company_contribution_detail_page.dart';
+import 'package:slicingpieproject/src/view/company_popup_contribution_detail_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/company_contribution_detail_viewmodel.dart';
 
@@ -64,17 +67,29 @@ Widget getListContributionUI(BuildContext context, int index,
     color: (index % 2 == 0) ? Colors.white : Colors.black12,
     child: GestureDetector(
       onTap: () {
-        print(companyHistory.listContribute[index].assetId);
-        Navigator.push(context,
-          MaterialPageRoute(builder: (context) => CompanyContributionDetailPage(
+        final popup = BeautifulPopup(
+          context: context,
+          template: TemplateBlueRocket,
+        );
+        popup.show(
+          title: 'Info',
+          content: CompanyContributionPopUpDetailPage(
             model: CompanyContributionDetailViewModel(
                 companyHistory.listContribute[index].assetId,companyHistory.listContribute[index].namePerson),),
-          ),
+          actions: [
+            popup.button(
+              label: 'Close',
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
         ).then((value) => companyHistory.getAll());
+
       },
       child: CustomListItemTwo(
         title: '${companyHistory.listContribute[index].typeAsset} Contribution',
-        subtitle: companyHistory.listContribute[index].timeAsset,
+        subtitle: intl.DateFormat('yyyy-MM-dd').format(DateTime.parse(companyHistory.listContribute[index].timeAsset)),
         author: companyHistory.listContribute[index].namePerson,
         quantity: companyHistory.listContribute[index].quantity.toString(),
         project: companyHistory.listContribute[index].project,
@@ -123,7 +138,8 @@ class _ArticleDescription extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
-                fontSize: 12.0,
+                fontSize: 17.0,
+                fontWeight: FontWeight.bold,
                 color: Colors.black54,
               ),
             ),
@@ -144,7 +160,7 @@ class _ArticleDescription extends StatelessWidget {
               'Project: $project',
               textAlign: TextAlign.left,
               style: const TextStyle(
-                fontSize: 13.0,
+                fontSize: 15.0,
                 color: Colors.black,
               ),
             ),
@@ -153,8 +169,8 @@ class _ArticleDescription extends StatelessWidget {
               textDirection: TextDirection.ltr,
               textAlign: TextAlign.left,
               style: const TextStyle(
-                fontSize: 15.0,
-                color: Colors.black,
+                fontSize: 18.0,
+                color: Colors.green,
                 fontWeight: FontWeight.bold
               ),
             ),

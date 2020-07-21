@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:slicingpieproject/src/view/loading_page.dart';
+import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/company_contribution_detail_viewmodel.dart';
+
+import 'company-history-contribute-page.dart';
 
 class CompanyContributionDetailPage extends StatelessWidget {
   final CompanyContributionDetailViewModel model;
@@ -21,145 +25,149 @@ class CompanyContributionDetailPage extends StatelessWidget {
         ),
         body: ScopedModelDescendant<CompanyContributionDetailViewModel>(
           builder: (context, child, model) {
-            return Builder(
-              builder: (contextBuilder) => Container(
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.fromLTRB(15, 20, 0, 5),
-                        child: Text(
-                          "Date: ",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
+            if(model.isLoading) {
+              return LoadingState();
+            } else {
+              return Builder(
+                builder: (contextBuilder) => Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.fromLTRB(15, 20, 0, 5),
+                          child: Text(
+                            "Date: ",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      _dateField(context),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.fromLTRB(15, 10, 0, 5),
-                        child: Text(
-                          "StakeHolder Name: ",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
+                        _dateField(context),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.fromLTRB(15, 10, 0, 5),
+                          child: Text(
+                            "StakeHolder Name: ",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      _stakeHolderNameField(),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.fromLTRB(15, 10, 0, 5),
-                        child: Text(
-                          "Quantity: ",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
+                        _stakeHolderNameField(),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.fromLTRB(15, 10, 0, 5),
+                          child: Text(
+                            "Quantity: ",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      _quantityField(),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.fromLTRB(15, 10, 0, 5),
-                        child: Text(
-                          "Description: ",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
+                        _quantityField(),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.fromLTRB(15, 10, 0, 5),
+                          child: Text(
+                            "Description: ",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      _descriptionField(),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
-                        child: Text(
-                          "Project *: ",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
+                        _descriptionField(),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.fromLTRB(15, 10, 0, 10),
+                          child: Text(
+                            "Project *: ",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      _projectField(),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.fromLTRB(15, 20, 0, 10),
-                        child: Text(
-                          "Type Assets *: ",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
+                        _projectField(),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.fromLTRB(15, 20, 0, 10),
+                          child: Text(
+                            "Type Assets *: ",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      _typeAssetField(),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.fromLTRB(15, 20, 0, 10),
-                        child: Text(
-                          "Term: ",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                              fontWeight: FontWeight.bold),
+                        _typeAssetField(),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.fromLTRB(15, 20, 0, 10),
+                          child: Text(
+                            "Term: ",
+                            style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
-                      ),
-                      _termField(),
+                        _termField(),
 
-                      SizedBox(
-                        width: double.infinity,
-                        height: 80,
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(
-                              30, 30, 30, 0),
-                          child: RaisedButton(
-                            onPressed: () async {
-                              bool isUpdated = await model.updateContribution();
-                              print("---------");
-                              print(isUpdated);
-                              if(isUpdated) {
-                                Fluttertoast.showToast(
-                                  msg: "Update Contribution success",
-                                  textColor: Colors.red,
-                                  toastLength: Toast.LENGTH_LONG,
-                                  backgroundColor: Colors.white,
-                                  gravity: ToastGravity.CENTER,
-                                );
-                                Navigator.pop(context);
-                              } else {
-                                Fluttertoast.showToast(
-                                  msg: "Update Contribution fail",
-                                  textColor: Colors.red,
-                                  toastLength: Toast.LENGTH_LONG,
-                                  backgroundColor: Colors.white,
-                                  gravity: ToastGravity.CENTER,
-                                );
-                                Navigator.of(context).pop();
-                              }
-                            },
-                            child: Text(
-                              "Update Contribution",
-                              style: TextStyle(
-                                  color: Colors.white, fontSize: 18),
-                            ),
-                            color: Colors.red,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.all(
-                                  Radius.circular(6)),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 80,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                                30, 30, 30, 0),
+                            child: RaisedButton(
+                              onPressed: () async {
+                                bool isUpdated = await model.updateContribution();
+                                print("---------");
+                                print(isUpdated);
+                                if(isUpdated) {
+                                  Fluttertoast.showToast(
+                                    msg: "Update Contribution success",
+                                    textColor: Colors.red,
+                                    toastLength: Toast.LENGTH_LONG,
+                                    backgroundColor: Colors.white,
+                                    gravity: ToastGravity.CENTER,
+                                  );
+                                  Navigator.of(context).pop();
+                                } else {
+                                  Fluttertoast.showToast(
+                                    msg: "Update Contribution fail",
+                                    textColor: Colors.red,
+                                    toastLength: Toast.LENGTH_LONG,
+                                    backgroundColor: Colors.white,
+                                    gravity: ToastGravity.CENTER,
+                                  );
+                                  Navigator.of(context).pop();
+                                }
+                              },
+                              child: Text(
+                                "Update Contribution",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                              color: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(6)),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            );
+              );
+            }
           },
         )
       ),

@@ -40,11 +40,11 @@ class APIString {
   //------------------------------------------------------------------------------------------------------
   //---------------------------------- API Assets --------------------------------------------------
   static String apiGetListAssetInCompany(String companyID) {
-    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID + "/TypeAsset";
+    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID + "/type-asset";
     return url;}
   //---------------------------------- API Contribution --------------------------------------------------
   static String apiAddContribution(String companyID, String stakeHolderID) {
-    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID + "/StakeHoler/" + stakeHolderID + "/Contribution";
+    String url = "https://slicingpiepj.azurewebsites.net/api/SliceAsset/company/" + companyID + "/stake-holer/" + stakeHolderID + "/contribution";
     return url;
   }
   static String apiGetContribution(String companyID) {

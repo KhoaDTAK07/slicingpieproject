@@ -41,6 +41,8 @@ class CompanyContributionDetailViewModel extends Model {
   TextEditingController typeAssetController = new TextEditingController();
   TextEditingController termIDController = new TextEditingController();
 
+  String companyID;
+
   CompanyContributionDetailViewModel(String assetID, String stakeHolderName) {
     getContributionDetail(assetID);
     stakeHolderNameController.text = stakeHolderName;
@@ -50,13 +52,13 @@ class CompanyContributionDetailViewModel extends Model {
     print("------------");
     print(assetID);
     _isLoading = true;
+    final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    companyID = sharedPreferences.getString("companyID");
     notifyListeners();
 
     _contributionDetailModel = await _repo.contributionDetail(assetID);
 
     //Get asset list
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String companyID = sharedPreferences.getString("companyID");
 
     _typeAssetList = await _termRepo.getTypeAssetList(companyID);
 
@@ -72,8 +74,6 @@ class CompanyContributionDetailViewModel extends Model {
       _contributionDetailModel = contributionDetailModel;
       _isLoading = false;
 
-      _date = DateFormat('yyyy-MM-dd').format(DateTime.parse(_contributionDetailModel.timeAsset));
-
       assetIDController.text = _contributionDetailModel.assetID;
       quantityController.text = _contributionDetailModel.quantity.toString();
       descriptionController.text = _contributionDetailModel.description;
@@ -82,6 +82,10 @@ class CompanyContributionDetailViewModel extends Model {
       companyIDController.text = _contributionDetailModel.companyID;
       projectIDController.text = _contributionDetailModel.projectID;
       termIDController.text = _contributionDetailModel.termID;
+
+      _description = Validation2(_contributionDetailModel.description, null);
+      _quantity = Validation2(_contributionDetailModel.quantity.toString(), null);
+      _date = DateFormat('yyyy-MM-dd').format(DateTime.parse(_contributionDetailModel.timeAsset));
       notifyListeners();
     }
     notifyListeners();

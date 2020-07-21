@@ -14,6 +14,13 @@ class HomePageViewModel extends Model {
   TermRepo _termRepo = TermRepoImp();
   final formatter = new NumberFormat("(##,##%)");
 
+  String _image, _stakeHolderID, _stakeHolderName, _companyName;
+
+  String get image => _image;
+  String get stakeHolderID => _stakeHolderID;
+  String get stakeHolderName => _stakeHolderName;
+  String get companyName => _companyName;
+
   StakeHolderList _stakeHolderList;
   TermList _termList;
   bool _isLoading = false;
@@ -63,8 +70,16 @@ class HomePageViewModel extends Model {
     sharedPreferences.setString("tokenLogIn", tokenLogIn);
     sharedPreferences.setString("token", userDetail.token);
     sharedPreferences.setString("stakeHolderID", userDetail.stakeHolderID);
+    sharedPreferences.setString("stakeHolderName", userDetail.stakeHolderName);
     sharedPreferences.setString("companyID", userDetail.companyID);
     sharedPreferences.setString("role", userDetail.role.toString());
+    sharedPreferences.setString("companyName", userDetail.companyName);
+    sharedPreferences.setString("shImage", userDetail.image);
+
+    _image = userDetail.image;
+    _stakeHolderID = userDetail.stakeHolderID;
+    _stakeHolderName = userDetail.stakeHolderName;
+    _companyName = userDetail.companyName;
 
     String token = sharedPreferences.getString("token");
     String companyID = sharedPreferences.getString("companyID");

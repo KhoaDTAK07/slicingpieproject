@@ -26,158 +26,162 @@ class HomePage extends StatelessWidget {
         child: ScopedModel<HomePageViewModel>(
           model: model,
           child: Scaffold(
-            drawer: Drawer(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: <Widget>[
-                  DrawerHeader(
-                    child: Text('John'),
-                    decoration: BoxDecoration(
-                      color: Colors.blue,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Home',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    leading: Icon(
-                      Icons.home,
-                      color: Colors.black,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Profile',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    leading: Icon(
-                      Icons.account_circle,
-                      color: Colors.black,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      'View Contribution',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    leading: Icon(
-                      Icons.pie_chart,
-                      color: Colors.black,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      'My History Contribution',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    leading: Icon(
-                      Icons.history,
-                      color: Colors.black,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      'History Contribution Company',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => CompanyHistoryContributePage(
-                            companyHistory: CompanyHistoryContributeViewModel(),
+            drawer: ScopedModelDescendant<HomePageViewModel>(
+              builder: (context, child, model) {
+                return Drawer(
+                  child: ListView(
+                    padding: EdgeInsets.zero,
+                    children: <Widget>[
+                      UserAccountsDrawerHeader(
+                        accountEmail: Text(model.stakeHolderName),
+                        accountName: Text(model.stakeHolderID),
+                        currentAccountPicture: new CircleAvatar(
+                          backgroundColor: Colors.brown,
+                          radius: 83.0,
+                          child: ClipOval(
+                            child: SizedBox(
+                              child: Image.network(model.image),
+                            ),
                           ),
                         ),
-                      );
-                    },
-                    leading: Icon(
-                      Icons.supervisor_account,
-                      color: Colors.black,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Company Setting',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    onTap: () {
-                      if (userToken == null) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CompanySettingPage(
-                              model: CompanySettingViewModel(),
+                      ),
+                      Divider(),
+                      ListTile(
+                        title: Text(
+                          'Home',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        leading: Icon(
+                          Icons.home,
+                          color: Colors.black,
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          'Profile',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        leading: Icon(
+                          Icons.account_circle,
+                          color: Colors.black,
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          'My History Contribution',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        leading: Icon(
+                          Icons.history,
+                          color: Colors.black,
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          'History Contribution Company',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  CompanyHistoryContributePage(
+                                companyHistory:
+                                    CompanyHistoryContributeViewModel(),
+                              ),
                             ),
-                          ),
-                        );
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CompanySettingPage(
-                              model: CompanySettingViewModel(),
-                            ),
-                          ),
-                        );
-                      }
-                    },
-                    leading: Icon(
-                      Icons.settings,
-                      color: Colors.black,
-                    ),
+                          );
+                        },
+                        leading: Icon(
+                          Icons.supervisor_account,
+                          color: Colors.black,
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          'Company Setting',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        onTap: () {
+                          if (userToken == null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CompanySettingPage(
+                                  model: CompanySettingViewModel(),
+                                ),
+                              ),
+                            );
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CompanySettingPage(
+                                  model: CompanySettingViewModel(),
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        leading: Icon(
+                          Icons.settings,
+                          color: Colors.black,
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          'Switch Company',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        leading: Icon(
+                          Icons.swap_horiz,
+                          color: Colors.black,
+                        ),
+                      ),
+                      ListTile(
+                        title: Text(
+                          'Logout',
+                          style: TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        leading: Icon(
+                          Icons.exit_to_app,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
                   ),
-                  ListTile(
-                    title: Text(
-                      'Switch Company',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    leading: Icon(
-                      Icons.swap_horiz,
-                      color: Colors.black,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text(
-                      'Logout',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                    ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    leading: Icon(
-                      Icons.exit_to_app,
-                      color: Colors.black,
-                    ),
-                  ),
-                ],
-              ),
+                );
+              },
             ),
             appBar: new AppBar(
-              title: new Text("Bug Company"),
+              title: ScopedModelDescendant<HomePageViewModel>(
+                builder: (context, child, model) {
+                  return Text(model.companyName);
+                },
+              ),
               bottom: new TabBar(
                   indicatorColor: Colors.blue,
                   indicatorWeight: 2.0,
@@ -186,10 +190,12 @@ class HomePage extends StatelessWidget {
                     new Tab(text: "Inactive"),
                   ]),
             ),
-            body: new TabBarView(children: [
-              ListViewHome(),
-              Icon(Icons.directions_transit),
-            ]),
+            body: new TabBarView(
+              children: [
+                ListViewHome(),
+                Icon(Icons.directions_transit),
+              ],
+            ),
           ),
         ),
       ),
@@ -201,170 +207,179 @@ class ListViewHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<HomePageViewModel>(
-        builder: (context, child, model) {
-      if (model.isLoading) {
-        return LoadingState();
-      } else {
-        return Container(
-          child: ListView.builder(
-            itemCount: model.stakeHolderList.stakeholderList.length,
-            itemBuilder: (context, index) {
-              return Container(
-                padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
-                child: Column(
-                  children: <Widget>[
-                    SizedBox(
-                      height: 25,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Container(
-                          padding: EdgeInsets.fromLTRB(140, 0, 0, 5),
-                          child: CircleAvatar(
-                            radius: 53.0,
+      builder: (context, child, model) {
+        if (model.isLoading) {
+          return LoadingState();
+        } else {
+          return Container(
+            child: ListView.builder(
+              itemCount: model.stakeHolderList.stakeholderList.length,
+              itemBuilder: (context, index) {
+                return Container(
+                  padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                  child: Column(
+                    children: <Widget>[
+                      SizedBox(
+                        height: 25,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Container(
+                            padding: EdgeInsets.fromLTRB(140, 0, 0, 5),
                             child: CircleAvatar(
-                              radius: 50,
-                              child: ClipOval(
-                                child: SizedBox(
-                                  width: 180,
-                                  height: 180,
-                                  child: Image.network(
-                                    model.stakeHolderList.stakeholderList[index]
-                                        .shImage,
-                                    fit: BoxFit.fill,
+                              radius: 53.0,
+                              child: CircleAvatar(
+                                radius: 50,
+                                child: ClipOval(
+                                  child: SizedBox(
+                                    width: 180,
+                                    height: 180,
+                                    child: Image.network(
+                                      model.stakeHolderList
+                                          .stakeholderList[index].shImage,
+                                      fit: BoxFit.fill,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(165, 5, 0, 5),
-                          child: Text(
-                            model.stakeHolderList.stakeholderList[index].shName,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(165, 0, 0, 15),
-                          child: Text(
-                            model.stakeHolderList.stakeholderList[index].shJob,
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Text(
-                            'Slice',
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          ),
-                          flex: 75,
-                        ),
-                        Expanded(
-                          child: Text(
-                            model.stakeHolderList.stakeholderList[index]
-                                .sliceAssets
-                                .toString(),
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.black,
-                            ),
-                          ),
-                          flex: 25,
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
-                      child: new LinearPercentIndicator(
-                        width: MediaQuery.of(context).size.width - 50,
-                        animation: true,
-                        lineHeight: 25.0,
-                        animationDuration: 2000,
-                        percent: (model.stakeHolderList.stakeholderList[index]
-                                .sliceAssets /
-                            model.getTotalSlice()),
-                        center: Text(model.getFormat((model.stakeHolderList
-                                    .stakeholderList[index].sliceAssets /
-                                model.getTotalSlice()) * 100)),
-                        linearStrokeCap: LinearStrokeCap.roundAll,
-                        progressColor: Colors.greenAccent,
+                        ],
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
-                      child: SizedBox(
-                        width: double.infinity,
-                        height: 52,
-                        child: RaisedButton(
-                          onPressed: () {
-                            Navigator.push(context,
-                              MaterialPageRoute(builder: (context) => ListTermPage(model: TermListViewModel(),
-                                                stakeHolderID: model.stakeHolderList.stakeholderList[index].shID,
-                                                stakeHolderName: model.stakeHolderList.stakeholderList[index].shName,),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(165, 5, 0, 5),
+                            child: Text(
+                              model.stakeHolderList.stakeholderList[index]
+                                  .shName,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
                               ),
-                            );
-                          },
-                          child: Text(
-                            'ADD CONTRIBUTION',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
+                              textAlign: TextAlign.center,
+                            ),
                           ),
-                          color: Colors.red,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(6)),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(165, 0, 0, 15),
+                            child: Text(
+                              model
+                                  .stakeHolderList.stakeholderList[index].shJob,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Text(
+                              'Slice',
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                            flex: 75,
+                          ),
+                          Expanded(
+                            child: Text(
+                              model.stakeHolderList.stakeholderList[index]
+                                  .sliceAssets
+                                  .toString(),
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                            flex: 25,
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                        child: new LinearPercentIndicator(
+                          width: MediaQuery.of(context).size.width - 50,
+                          animation: true,
+                          lineHeight: 25.0,
+                          animationDuration: 2000,
+                          percent: (model.stakeHolderList.stakeholderList[index]
+                                  .sliceAssets /
+                              model.getTotalSlice()),
+                          center: Text(model.getFormat((model.stakeHolderList
+                                      .stakeholderList[index].sliceAssets /
+                                  model.getTotalSlice()) *
+                              100)),
+                          linearStrokeCap: LinearStrokeCap.roundAll,
+                          progressColor: Colors.greenAccent,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: 52,
+                          child: RaisedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ListTermPage(
+                                    model: TermListViewModel(),
+                                    stakeHolderID: model.stakeHolderList
+                                        .stakeholderList[index].shID,
+                                    stakeHolderName: model.stakeHolderList
+                                        .stakeholderList[index].shName,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: Text(
+                              'ADD CONTRIBUTION',
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                            color: Colors.red,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(6)),
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Expanded(
-                          child: Container(
-                            color: Colors.black12,
-                            width: double.infinity,
-                            height: 2,
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                              color: Colors.black12,
+                              width: double.infinity,
+                              height: 2,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        );
-      }
-    });
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      },
+    );
   }
-
-
-
 }
 
 class LoadingState extends StatelessWidget {
