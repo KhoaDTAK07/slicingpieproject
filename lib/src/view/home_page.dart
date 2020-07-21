@@ -21,184 +21,188 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: DefaultTabController(
-        length: 2,
-        child: ScopedModel<HomePageViewModel>(
+      home: ScopedModel<HomePageViewModel>(
           model: model,
-          child: Scaffold(
-            drawer: ScopedModelDescendant<HomePageViewModel>(
-              builder: (context, child, model) {
-                return Drawer(
-                  child: ListView(
-                    padding: EdgeInsets.zero,
-                    children: <Widget>[
-                      UserAccountsDrawerHeader(
-                        accountEmail: Text(model.stakeHolderName),
-                        accountName: Text(model.stakeHolderID),
-                        currentAccountPicture: new CircleAvatar(
-                          backgroundColor: Colors.brown,
-                          radius: 83.0,
-                          child: ClipOval(
-                            child: SizedBox(
-                              child: Image.network(model.image),
+          child: DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              drawer: ScopedModelDescendant<HomePageViewModel>(
+                builder: (context, child, model) {
+                  return Drawer(
+                    child: ListView(
+                      padding: EdgeInsets.zero,
+                      children: <Widget>[
+                        UserAccountsDrawerHeader(
+                          accountEmail: Text(model.stakeHolderName),
+                          accountName: Text(model.stakeHolderID),
+                          currentAccountPicture: new CircleAvatar(
+                            backgroundColor: Colors.brown,
+                            radius: 83.0,
+                            child: ClipOval(
+                              child: SizedBox(
+                                child: Image.network(model.image),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      Divider(),
-                      ListTile(
-                        title: Text(
-                          'Home',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                        Divider(),
+                        ListTile(
+                          title: Text(
+                            'Home',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          leading: Icon(
+                            Icons.home,
+                            color: Colors.black,
+                          ),
                         ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        leading: Icon(
-                          Icons.home,
-                          color: Colors.black,
+                        ListTile(
+                          title: Text(
+                            'Profile',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          leading: Icon(
+                            Icons.account_circle,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      ListTile(
-                        title: Text(
-                          'Profile',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ListTile(
+                          title: Text(
+                            'My History Contribution',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          leading: Icon(
+                            Icons.history,
+                            color: Colors.black,
+                          ),
                         ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        leading: Icon(
-                          Icons.account_circle,
-                          color: Colors.black,
-                        ),
-                      ),
-                      ListTile(
-                        title: Text(
-                          'My History Contribution',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        leading: Icon(
-                          Icons.history,
-                          color: Colors.black,
-                        ),
-                      ),
-                      ListTile(
-                        title: Text(
-                          'History Contribution Company',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  CompanyHistoryContributePage(
-                                companyHistory:
-                                    CompanyHistoryContributeViewModel(),
-                              ),
-                            ),
-                          );
-                        },
-                        leading: Icon(
-                          Icons.supervisor_account,
-                          color: Colors.black,
-                        ),
-                      ),
-                      ListTile(
-                        title: Text(
-                          'Company Setting',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        onTap: () {
-                          if (userToken == null) {
+                        ListTile(
+                          title: Text(
+                            'History Contribution Company',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          onTap: () {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => CompanySettingPage(
-                                  model: CompanySettingViewModel(),
+                                builder: (context) =>
+                                    CompanyHistoryContributePage(
+                                  companyHistory:
+                                      CompanyHistoryContributeViewModel(),
                                 ),
                               ),
                             );
-                          } else {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => CompanySettingPage(
-                                  model: CompanySettingViewModel(),
+                          },
+                          leading: Icon(
+                            Icons.supervisor_account,
+                            color: Colors.black,
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                            'Company Setting',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          onTap: () {
+                            if (userToken == null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CompanySettingPage(
+                                    model: CompanySettingViewModel(),
+                                  ),
                                 ),
-                              ),
-                            );
-                          }
-                        },
-                        leading: Icon(
-                          Icons.settings,
-                          color: Colors.black,
+                              );
+                            } else {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CompanySettingPage(
+                                    model: CompanySettingViewModel(),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                          leading: Icon(
+                            Icons.settings,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      ListTile(
-                        title: Text(
-                          'Switch Company',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ListTile(
+                          title: Text(
+                            'Switch Company',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          leading: Icon(
+                            Icons.swap_horiz,
+                            color: Colors.black,
+                          ),
                         ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        leading: Icon(
-                          Icons.swap_horiz,
-                          color: Colors.black,
+                        ListTile(
+                          title: Text(
+                            'Logout',
+                            style: TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          leading: Icon(
+                            Icons.exit_to_app,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      ListTile(
-                        title: Text(
-                          'Logout',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        leading: Icon(
-                          Icons.exit_to_app,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-            appBar: new AppBar(
-              title: ScopedModelDescendant<HomePageViewModel>(
-                builder: (context, child, model) {
-                  return Text(model.companyName);
+                      ],
+                    ),
+                  );
                 },
               ),
-              bottom: new TabBar(
-                  indicatorColor: Colors.blue,
-                  indicatorWeight: 2.0,
-                  tabs: [
-                    new Tab(text: "Active"),
-                    new Tab(text: "Inactive"),
-                  ]),
-            ),
-            body: new TabBarView(
-              children: [
-                ListViewHome(),
-                Icon(Icons.directions_transit),
-              ],
+              appBar: new AppBar(
+                title: ScopedModelDescendant<HomePageViewModel>(
+                  builder: (context, child, model) {
+                    if(model.isLoading) {
+                      return Text("");
+                    } else {
+                      return Text(model.companyName);
+                    }
+                  },
+                ),
+                bottom: new TabBar(
+                    indicatorColor: Colors.blue,
+                    indicatorWeight: 2.0,
+                    tabs: [
+                      new Tab(text: "Active"),
+                      new Tab(text: "Inactive"),
+                    ]),
+              ),
+              body: new TabBarView(
+                children: [
+                  ListViewHome(),
+                  Icon(Icons.directions_transit),
+                ],
+              ),
             ),
           ),
         ),
-      ),
     );
   }
 }
@@ -280,35 +284,30 @@ class ListViewHome extends StatelessWidget {
                         ],
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          Expanded(
-                            child: Text(
-                              'Slice',
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                              ),
+                          Text(
+                            'Slice',
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
                             ),
-                            flex: 75,
                           ),
-                          Expanded(
-                            child: Text(
-                              model.stakeHolderList.stakeholderList[index]
-                                  .sliceAssets
-                                  .toString(),
-                              style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.black,
-                              ),
+                          Text(
+                            model.stakeHolderList.stakeholderList[index].sliceAssets.toStringAsFixed(2),
+                            textAlign: TextAlign.left,
+                            textDirection: TextDirection.ltr,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.black,
                             ),
-                            flex: 25,
                           ),
                         ],
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
                         child: new LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 50,
                           animation: true,
                           lineHeight: 25.0,
                           animationDuration: 2000,
@@ -316,7 +315,7 @@ class ListViewHome extends StatelessWidget {
                                   .sliceAssets /
                               model.getTotalSlice()),
                           center: Text(model.getFormat((model.stakeHolderList
-                                      .stakeholderList[index].sliceAssets /
+                              .stakeholderList[index].sliceAssets /
                                   model.getTotalSlice()) *
                               100)),
                           linearStrokeCap: LinearStrokeCap.roundAll,
