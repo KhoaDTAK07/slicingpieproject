@@ -11,6 +11,7 @@ abstract class StakeHolderRepo {
   Future<StakeHolderList> stakeHolderList (String tokenUser, String companyID);
   Future<bool> addStakeHolder(String addJson);
   Future<StakeHolder> getStakeHolderDetail(String accountID);
+  Future<bool> updateStakeHolder(String accountID, String updateJson);
 }
 
 class StakeHolderRepoImp implements StakeHolderRepo {
@@ -84,6 +85,32 @@ class StakeHolderRepoImp implements StakeHolderRepo {
     stakeHolder = StakeHolder.fromJsonDetail(map);
 
     return stakeHolder;
+  }
+
+  @override
+  Future<bool> updateStakeHolder(String accountID, String updateJson) async {
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String companyID = sharedPreferences.getString("companyID");
+    String tokenUser = sharedPreferences.getString("token");
+
+    String apiUpdate = APIString.apiUpdateStakeHolder() + companyID + "/" + accountID;
+
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json", // or whatever
+      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
+    };
+
+    http.Response response = await http.put(apiUpdate, headers: header ,body: updateJson);
+
+    int statusCode = response.statusCode;
+
+    if(statusCode == 204) {
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
 

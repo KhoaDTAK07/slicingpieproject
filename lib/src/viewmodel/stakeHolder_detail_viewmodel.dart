@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -15,6 +16,9 @@ class StakeHolderDetailViewModel extends Model {
 
   StakeHolder _stakeHolderDetailModel;
   StakeHolder get stakeHolderDetailModel => _stakeHolderDetailModel;
+
+  StakeHolder _stakeHolderUpdateModel;
+  StakeHolder get stakeHolderUpdateModel => _stakeHolderUpdateModel;
 
   bool _isLoading = false;
   bool _isReady = true;
@@ -148,6 +152,68 @@ class StakeHolderDetailViewModel extends Model {
       notifyListeners();
     }
 
+  }
+
+  Future<bool> updateStakeHolder() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String companyID = sharedPreferences.getString("companyID");
+    _isReady = true;
+
+    if(_shMarketSalary.value == null) {
+      print(_shMarketSalary.value);
+      checkShMarketSalary(null);
+      _isReady = false;
+    }
+    if(_shSalary.value == null) {
+      print(_shSalary.value);
+      checkShSalary(null);
+      _isReady = false;
+    }
+    if(_shJob.value == null) {
+      print(_shJob.value);
+      checkShJob(null);
+      _isReady = false;
+    }
+    if(_shNameForCompany.value == null) {
+      print(_shNameForCompany.value);
+      checkShNameForCompany(null);
+      _isReady = false;
+    }
+    if(double.parse(_shMarketSalary.value) < double.parse(_shSalary.value)) {
+      print("Market salary must be higher than salary");
+      checkShMarketSalary(null);
+      checkShSalary(null);
+      _isReady = false;
+    }
+
+    if(_isReady == true) {
+      _isLoading = true;
+      notifyListeners();
+
+      String currentImage;
+      if(_image != null) {
+        var url = await upLoadImage();
+        currentImage = url.toString();
+      } else {
+        currentImage = defaultImage;
+      }
+
+      _stakeHolderUpdateModel = new StakeHolder(
+        shID: accountIDField.text,
+        companyID: companyID,
+        shMarketSalary: double.parse(_shMarketSalary.value),
+        shSalary: double.parse(_shSalary.value),
+        shJob: _shJob.value,
+        shNameForCompany: _shNameForCompany.value,
+        shImage: currentImage,
+        shStatus: "abc",
+        shRole: 0,
+      );
+
+      String updateJson = jsonEncode(_stakeHolderUpdateModel.toJson());
+
+      return _stakeHolderRepo.updateStakeHolder(accountIDField.text, updateJson);
+    }
   }
 
 }

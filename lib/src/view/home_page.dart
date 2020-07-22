@@ -249,7 +249,7 @@ class ListViewHome extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         builder: (context) => StakeHolderDetaiPage(
-                          model: StakeHolderDetailViewModel(stakeHolderID),
+                          model: StakeHolderDetailViewModel(model.stakeHolderList.stakeholderList[index].shID),
                         ),
                       ),
                     ).then((value) => model.loadListStakeHolderByNormalSignIn(tokenLogIn));

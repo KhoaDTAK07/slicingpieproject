@@ -60,26 +60,26 @@ class StakeHolderDetaiPage extends StatelessWidget {
                             padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
                             child: RaisedButton(
                               onPressed: () async {
-//                                bool isCreate = await model.addStakeHolder();
-//                                if (isCreate) {
-//                                  Fluttertoast.showToast(
-//                                    msg: "Add new StakeHolder success",
-//                                    textColor: Colors.red,
-//                                    toastLength: Toast.LENGTH_SHORT,
-//                                    backgroundColor: Colors.white,
-//                                    gravity: ToastGravity.CENTER,
-//                                  );
-//                                  Navigator.of(context).pop();
-//                                } else {
-//                                  Fluttertoast.showToast(
-//                                    msg: "Add new StakeHolder fail",
-//                                    textColor: Colors.red,
-//                                    toastLength: Toast.LENGTH_SHORT,
-//                                    backgroundColor: Colors.white,
-//                                    gravity: ToastGravity.CENTER,
-//                                  );
-//                                  Navigator.of(context).pop();
-//                                }
+                                bool isUpdate = await model.updateStakeHolder();
+                                if (isUpdate) {
+                                  Fluttertoast.showToast(
+                                    msg: "Update StakeHolder success",
+                                    textColor: Colors.red,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    backgroundColor: Colors.white,
+                                    gravity: ToastGravity.CENTER,
+                                  );
+                                  Navigator.of(context).pop();
+                                } else {
+                                  Fluttertoast.showToast(
+                                    msg: "Update StakeHolder fail",
+                                    textColor: Colors.red,
+                                    toastLength: Toast.LENGTH_SHORT,
+                                    backgroundColor: Colors.white,
+                                    gravity: ToastGravity.CENTER,
+                                  );
+                                  Navigator.of(context).pop();
+                                }
                               },
                               child: Text(
                                 "Update StakeHolder",

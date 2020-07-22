@@ -34,6 +34,11 @@ class APIString {
     String url = "https://slicingpiepj.azurewebsites.net/api/StackHolders/";
     return url;
   }
+
+  static String apiUpdateStakeHolder() {
+    String url = "https://slicingpiepj.azurewebsites.net/api/StackHolders/";
+    return url;
+  }
   //------------------------------------------------------------------------------------------------------
 
   //---------------------------------- API Company -------------------------------------------------------
