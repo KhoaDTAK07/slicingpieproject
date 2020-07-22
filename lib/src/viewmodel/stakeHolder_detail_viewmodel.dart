@@ -1,5 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
+
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
@@ -10,9 +10,11 @@ import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:slicingpieproject/src/repos/stakeholder_repo.dart';
 import 'package:path/path.dart' as path;
 
-class StakeHolderAddViewModel extends Model {
+class StakeHolderDetailViewModel extends Model {
   StakeHolderRepo _stakeHolderRepo = StakeHolderRepoImp();
-  StakeHolder _stakeHolder;
+
+  StakeHolder _stakeHolderDetailModel;
+  StakeHolder get stakeHolderDetailModel => _stakeHolderDetailModel;
 
   bool _isLoading = false;
   bool _isReady = true;
@@ -32,12 +34,16 @@ class StakeHolderAddViewModel extends Model {
   Validation2 get shJob => _shJob;
   Validation2 get shNameForCompany => _shNameForCompany;
 
-  TextEditingController stakeHolderNameField = new TextEditingController();
+  TextEditingController accountIDField = new TextEditingController();
+  TextEditingController shMarketSalaryField = new TextEditingController();
+  TextEditingController shSalaryField = new TextEditingController();
+  TextEditingController shJobField = new TextEditingController();
+  TextEditingController shNameForCompanyField = new TextEditingController();
 
   File _image;
   File get image => _image;
 
-  String _defaultImage = "https://firebasestorage.googleapis.com/v0/b/swdslicingpie-59d47.appspot.com/o/noimage.jpg?alt=media&token=0c5a62f3-d5e6-4983-942a-085761d66567";
+  String _defaultImage;
   String get defaultImage => _defaultImage;
 
   void checkAccountID(String accountID) {
@@ -111,67 +117,37 @@ class StakeHolderAddViewModel extends Model {
     return url;
   }
 
-  Future<dynamic> addStakeHolder() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String companyID = sharedPreferences.getString("companyID");
-
-    _isReady = true;
-
-    if(_accountID.value == null) {
-      print(_accountID.value);
-      checkAccountID(null);
-      _isReady = false;
-    }
-    if(_shMarketSalary.value == null) {
-      print(_shMarketSalary.value);
-      checkShMarketSalary(null);
-      _isReady = false;
-    }
-    if(_shSalary.value == null) {
-      print(_shSalary.value);
-      checkShSalary(null);
-      _isReady = false;
-    }
-    if(_shNameForCompany.value == null) {
-      print(_shNameForCompany.value);
-      checkShNameForCompany(null);
-      _isReady = false;
-    }
-    if(_shJob.value == null) {
-      print(_shJob.value);
-      checkShJob(null);
-      _isReady = false;
-    }
-    if(_isReady == true) {
-      _isLoading = true;
-      notifyListeners();
-
-      String nowImage;
-      if (_image != null) {
-        var url = await upLoadImage();
-        nowImage = url.toString();
-      } else {
-        nowImage = defaultImage;
-      }
-
-      _stakeHolder = new StakeHolder(
-        shID: _accountID.value,
-        companyID: companyID,
-        shMarketSalary: double.parse(_shMarketSalary.value),
-        shSalary: double.parse(_shSalary.value),
-        shJob: _shJob.value,
-        shNameForCompany: _shNameForCompany.value,
-        shImage: nowImage,
-        shStatus: "abc",
-        shRole: 0,
-      );
-
-      String addJson = jsonEncode(_stakeHolder.toJson());
-
-      print("--Add Json--");
-      print(addJson);
-
-      return _stakeHolderRepo.addStakeHolder(addJson);
-    }
+  StakeHolderDetailViewModel(String accountID) {
+    loadStakeHolderDetail(accountID);
   }
+
+  void loadStakeHolderDetail(String accountID) async {
+    _isLoading = true;
+
+    notifyListeners();
+
+    _stakeHolderDetailModel = await _stakeHolderRepo.getStakeHolderDetail(accountID);
+
+    if(_stakeHolderDetailModel != null) {
+      _stakeHolderDetailModel = stakeHolderDetailModel;
+
+      accountIDField.text =  _stakeHolderDetailModel.shID;
+      shMarketSalaryField.text = _stakeHolderDetailModel.shMarketSalary.toString();
+      shSalaryField.text = _stakeHolderDetailModel.shSalary.toString();
+      shJobField.text = _stakeHolderDetailModel.shJob;
+      shNameForCompanyField.text = _stakeHolderDetailModel.shNameForCompany;
+      _defaultImage = _stakeHolderDetailModel.shImage;
+
+      _accountID = Validation2(_stakeHolderDetailModel.shID, null);
+      _shMarketSalary = Validation2(_stakeHolderDetailModel.shMarketSalary.toString(), null);
+      _shSalary = Validation2(_stakeHolderDetailModel.shSalary.toString(), null);
+      _shJob = Validation2(_stakeHolderDetailModel.shJob, null);
+      _shNameForCompany = Validation2(_stakeHolderDetailModel.shNameForCompany, null);
+
+      _isLoading = false;
+      notifyListeners();
+    }
+
+  }
+
 }

@@ -19,8 +19,8 @@ class StakeHolderList {
 
 class StakeHolder {
   final String shID, shName,shJob,shImage,companyID, shNameForCompany, shStatus;
-  final double sliceAssets;
-  final int shMarketSalary, shSalary, shRole;
+  final double sliceAssets, shMarketSalary, shSalary;
+  final int shRole;
 
   StakeHolder({this.shID, this.shName, this.shJob, this.shImage, this.companyID, this.sliceAssets, this.shMarketSalary, this.shSalary, this.shNameForCompany, this.shStatus, this.shRole});
 
@@ -32,6 +32,18 @@ class StakeHolder {
       shImage: json['shImage'],
       companyID: json['companyID'],
       sliceAssets: json['sliceAssets']
+    );
+  }
+
+  factory StakeHolder.fromJsonDetail(Map<String, dynamic> json){
+    return StakeHolder(
+        shID: json['accountId'],
+        companyID: json['companyId'],
+        shMarketSalary: json['shmarketSalary'],
+        shSalary: json['shsalary'],
+        shJob: json['shjob'],
+        shNameForCompany: json['shnameForCompany'],
+        shImage: json['shimage'],
     );
   }
 

@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_beautiful_popup/main.dart';
 import 'package:intl/intl.dart' as intl;
 import 'package:scoped_model/scoped_model.dart';
-import 'package:slicingpieproject/src/view/company_contribution_detail_page.dart';
 import 'package:slicingpieproject/src/view/company_popup_contribution_detail_page.dart';
+import 'package:slicingpieproject/src/view/companysetting_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/company_contribution_detail_viewmodel.dart';
 
@@ -25,12 +25,51 @@ class CompanyHistoryContributePage extends StatelessWidget {
           child: ScopedModelDescendant<CompanyHistoryContributeViewModel>(
             builder: (context, child, companyHistory) {
               if (companyHistory.isLoading == true) {
-                return LoadingScreen();
+                return LoadingState();
               } else
-              return Padding(
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-                child: getListContribution(context, companyHistory),
-              );
+                return Padding(
+                  padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+                  child: ListView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: companyHistory.listContribute.length,
+                    itemBuilder: (contextBuilder, index) {
+                      return Container(
+                        padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
+                        color: (index % 2 == 0) ? Colors.white : Colors.black12,
+                        child: GestureDetector(
+                          onTap: () {
+                            final popup = BeautifulPopup(
+                              context: context,
+                              template: TemplateBlueRocket,
+                            );
+                            popup.show(
+                              title: 'Info',
+                              content: CompanyContributionPopUpDetailPage(
+                                model: CompanyContributionDetailViewModel(
+                                    companyHistory.listContribute[index].assetId,companyHistory.listContribute[index].namePerson),),
+//                              actions: [
+//                                popup.button(
+//                                  label: 'Close',
+//                                  onPressed: () {
+//                                    Navigator.of(context).pop();
+//                                  },
+//                                ),
+//                              ],
+                            );
+
+                          },
+                          child: CustomListItemTwo(
+                            title: '${companyHistory.listContribute[index].typeAsset} Contribution',
+                            subtitle: intl.DateFormat('yyyy-MM-dd').format(DateTime.parse(companyHistory.listContribute[index].timeAsset)),
+                            author: companyHistory.listContribute[index].namePerson,
+                            quantity: companyHistory.listContribute[index].quantity.toString(),
+                            project: companyHistory.listContribute[index].project,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                );
             },
           ),
         ),
@@ -40,63 +79,15 @@ class CompanyHistoryContributePage extends StatelessWidget {
 
 }
 
-class LoadingScreen extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-}
+//Widget getListContribution(
+//    BuildContext context, CompanyHistoryContributeViewModel companyHistory) {
+//  return
+//};
 
-Widget getListContribution(
-    BuildContext context, CompanyHistoryContributeViewModel companyHistory) {
-  return ListView.builder(
-    scrollDirection: Axis.vertical,
-    itemCount: companyHistory.listContribute.length,
-    itemBuilder: (context, index) {
-      return getListContributionUI(context, index, companyHistory);
-    },
-  );
-}
-
-Widget getListContributionUI(BuildContext context, int index,
-    CompanyHistoryContributeViewModel companyHistory) {
-  return Container(
-    padding: EdgeInsets.fromLTRB(10, 0, 0, 0),
-    color: (index % 2 == 0) ? Colors.white : Colors.black12,
-    child: GestureDetector(
-      onTap: () {
-        final popup = BeautifulPopup(
-          context: context,
-          template: TemplateBlueRocket,
-        );
-        popup.show(
-          title: 'Info',
-          content: CompanyContributionPopUpDetailPage(
-            model: CompanyContributionDetailViewModel(
-                companyHistory.listContribute[index].assetId,companyHistory.listContribute[index].namePerson),),
-          actions: [
-            popup.button(
-              label: 'Close',
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        ).then((value) => companyHistory.getAll());
-
-      },
-      child: CustomListItemTwo(
-        title: '${companyHistory.listContribute[index].typeAsset} Contribution',
-        subtitle: intl.DateFormat('yyyy-MM-dd').format(DateTime.parse(companyHistory.listContribute[index].timeAsset)),
-        author: companyHistory.listContribute[index].namePerson,
-        quantity: companyHistory.listContribute[index].quantity.toString(),
-        project: companyHistory.listContribute[index].project,
-      ),
-    ),
-  );
-}
+//Widget getListContributionUI(BuildContext context, int index,
+//    CompanyHistoryContributeViewModel companyHistory) {
+//  return
+//}
 
 class _ArticleDescription extends StatelessWidget {
   _ArticleDescription({
@@ -169,9 +160,9 @@ class _ArticleDescription extends StatelessWidget {
               textDirection: TextDirection.ltr,
               textAlign: TextAlign.left,
               style: const TextStyle(
-                fontSize: 18.0,
-                color: Colors.green,
-                fontWeight: FontWeight.bold
+                  fontSize: 18.0,
+                  color: Colors.green,
+                  fontWeight: FontWeight.bold
               ),
             ),
           ],

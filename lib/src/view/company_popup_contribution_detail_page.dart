@@ -18,185 +18,185 @@ class CompanyContributionPopUpDetailPage extends StatelessWidget {
       child: Scaffold(
         body: ScopedModelDescendant<CompanyContributionDetailViewModel>(
           builder: (context, child, model) {
-           if(model.isLoading) {
-             return LoadingState();
-           } else {
-             return Builder(
-               builder: (contextBuilder) => Container(
-                 child: SingleChildScrollView(
-                   child: Column(
-                     children: <Widget>[
-                       Row(
-                         children: <Widget>[
-                           Container(
-                             child: Icon(Icons.schedule),
-                           ),
-                           SizedBox(
-                             width: 10,
-                           ),
-                           Expanded(
-                             flex: 3,
-                             child: Container(
-                               child: Text(
-                                 'Date',
-                               ),
-                             ),
-                           ),
-                           Expanded(
-                             flex: 3,
-                             child: Container(
-                               child: Text(
-                                 DateFormat('yyyy-MM-dd')
-                                     .format(DateTime.parse(model.date)),
-                               ),
-                             ),
-                           ),
-                           SizedBox(height: 15),
-                         ],
-                       ),
-                       SizedBox(height: 15),
-                       Row(
-                         children: <Widget>[
-                           Container(
-                             child: Icon(Icons.monetization_on),
-                           ),
-                           SizedBox(
-                             width: 10,
-                           ),
-                           Expanded(
-                             flex: 3,
-                             child: Container(
-                               child: Text(
-                                 'Quantity ',
-                               ),
-                             ),
-                           ),
-                           Expanded(
-                             flex: 3,
-                             child: Container(
-                               child: Text(model.quantityController.text),
-                             ),
-                           ),
-                           SizedBox(height: 15),
-                         ],
-                       ),
-                       SizedBox(height: 15),
-                       Row(
-                         children: <Widget>[
-                           Container(
-                             child: Icon(Icons.description),
-                           ),
-                           SizedBox(
-                             width: 10,
-                           ),
-                           Expanded(
-                             flex: 3,
-                             child: Container(
-                               child: Text(
-                                 'Description',
-                               ),
-                             ),
-                           ),
-                           Expanded(
-                             flex: 3,
-                             child: Container(
-                               child: Text(model.descriptionController.text),
-                             ),
-                           ),
-                           SizedBox(height: 15),
-                         ],
-                       ),
-                       SizedBox(height: 15),
-                       Row(
-                         children: <Widget>[
-                           Container(
-                             child: Icon(Icons.image),
-                           ),
-                           SizedBox(
-                             width: 10,
-                           ),
-                           Expanded(
-                             flex: 3,
-                             child: Container(
-                               child: Text(
-                                 'Type Asset',
-                               ),
-                             ),
-                           ),
-                           Expanded(
-                             flex: 3,
-                             child: Container(
-                               child: Text(model.typeAssetController.text),
-                             ),
-                           ),
-                           SizedBox(height: 15),
-                         ],
-                       ),
-                       SizedBox(height: 15),
-                       Row(
-                         children: <Widget>[
-                           Container(
-                             child: Icon(Icons.image),
-                           ),
-                           SizedBox(
-                             width: 10,
-                           ),
-                           Expanded(
-                             flex: 3,
-                             child: Container(
-                               child: Text(
-                                 'Term',
-                               ),
-                             ),
-                           ),
-                           Expanded(
-                             flex: 3,
-                             child: Container(
-                               child: Text(model.termIDController.text),
-                             ),
-                           ),
-                           SizedBox(height: 15),
-                         ],
-                       ),
-                       SizedBox(
-                         width: double.infinity,
-                         height: 80,
-                         child: Padding(
-                           padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
-                           child: RaisedButton(
-                             onPressed: () async {
-                               print(model.assetIDController);
-                               Navigator.push(
-                                 context,
-                                 MaterialPageRoute(
-                                   builder: (context) =>
-                                       CompanyContributionDetailPage(
-                                         model: CompanyContributionDetailViewModel(
-                                             model.assetIDController.text,
-                                             model.stakeHolderNameController.text),
-                                       ),
-                                 ),
-                               ).then((value) => model.getContributionDetail(model.assetIDController.text));
-                             },
-                             child: Text(
-                               "Edit Contribution",
-                               style:
-                               TextStyle(color: Colors.white, fontSize: 18),
-                             ),
-                             color: Colors.red,
-                             shape: RoundedRectangleBorder(
-                               borderRadius:
-                               BorderRadius.all(Radius.circular(6)),
-                             ),
-                           ),
-                         ),
-                       ),
-                     ],
-                   ),
-                 ),
-               ),
-             );
-           }
+            if(model.isLoading) {
+              return LoadingState();
+            } else {
+              return Builder(
+                builder: (contextBuilder) => Container(
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.schedule),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                child: Text(
+                                  'Date',
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                child: Text(
+                                  DateFormat('yyyy-MM-dd')
+                                      .format(DateTime.parse(model.date)),
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.monetization_on),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                child: Text(
+                                  'Quantity ',
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                child: Text(model.quantityController.text),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.description),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                child: Text(
+                                  'Description',
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                child: Text(model.descriptionController.text),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.image),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                child: Text(
+                                  'Type Asset',
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                child: Text(model.typeAssetController.text),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                          ],
+                        ),
+                        SizedBox(height: 15),
+                        Row(
+                          children: <Widget>[
+                            Container(
+                              child: Icon(Icons.image),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                child: Text(
+                                  'Term',
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 3,
+                              child: Container(
+                                child: Text(model.termIDController.text),
+                              ),
+                            ),
+                            SizedBox(height: 15),
+                          ],
+                        ),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 80,
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
+                            child: RaisedButton(
+                              onPressed: () async {
+                                print(model.assetIDController);
+                                await Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        CompanyContributionDetailPage(
+                                          model: CompanyContributionDetailViewModel(
+                                              model.assetIDController.text,
+                                              model.stakeHolderNameController.text),
+                                        ),
+                                  ),
+                                ).then((value) => model.getContributionDetail(model.assetIDController.text));
+                              },
+                              child: Text(
+                                "Edit Contribution",
+                                style:
+                                TextStyle(color: Colors.white, fontSize: 18),
+                              ),
+                              color: Colors.red,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(6)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            }
           },
         ),
       ),

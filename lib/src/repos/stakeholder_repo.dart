@@ -10,6 +10,7 @@ import 'package:http/http.dart' as http;
 abstract class StakeHolderRepo {
   Future<StakeHolderList> stakeHolderList (String tokenUser, String companyID);
   Future<bool> addStakeHolder(String addJson);
+  Future<StakeHolder> getStakeHolderDetail(String accountID);
 }
 
 class StakeHolderRepoImp implements StakeHolderRepo {
@@ -61,6 +62,28 @@ class StakeHolderRepoImp implements StakeHolderRepo {
       return false;
     }
     
+  }
+
+  @override
+  Future<StakeHolder> getStakeHolderDetail(String accountID) async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String companyID = sharedPreferences.getString("companyID");
+    String tokenUser = sharedPreferences.getString("token");
+
+    String apiGetDetail = APIString.apiGetStakeHolderDetail() + companyID + "/" + accountID;
+
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json", // or whatever
+      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
+    };
+
+    http.Response response = await http.get(apiGetDetail, headers: header);
+    Map<String, dynamic> map = json.decode(response.body);
+
+    StakeHolder stakeHolder;
+    stakeHolder = StakeHolder.fromJsonDetail(map);
+
+    return stakeHolder;
   }
 
 

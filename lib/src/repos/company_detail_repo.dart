@@ -22,10 +22,10 @@ class CompanyRepoImp implements CompanyRepo{
       HttpHeaders.authorizationHeader: "Bearer $tokenUser",
     };
     http.Response response = await http.get(apiGetCompanyProfile, headers: headers);
-    Map<String, dynamic> list = json.decode(response.body);
+    Map<String, dynamic> map = json.decode(response.body);
 
     Company company;
-    company = Company.fromJson(list);
+    company = Company.fromJson(map);
     return company;
   }
 
