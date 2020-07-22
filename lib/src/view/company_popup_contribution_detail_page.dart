@@ -166,11 +166,8 @@ class CompanyContributionPopUpDetailPage extends StatelessWidget {
                             child: RaisedButton(
                               onPressed: () async {
                                 print(model.assetIDController);
-                                await Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        CompanyContributionDetailPage(
+                                await Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => CompanyContributionDetailPage(
                                           model: CompanyContributionDetailViewModel(
                                               model.assetIDController.text,
                                               model.stakeHolderNameController.text),

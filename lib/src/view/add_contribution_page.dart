@@ -140,8 +140,8 @@ class AddContributionPage extends StatelessWidget {
                                         backgroundColor: Colors.white,
                                         gravity: ToastGravity.CENTER,
                                       );
-                                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-                                          HomePage(model: HomePageViewModel(tokenLogIn,1,companyID),)), (Route<dynamic> route) => false);
+//                                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+//                                          HomePage(model: HomePageViewModel(tokenLogIn,1,companyID),)), (Route<dynamic> route) => false);
 
                                     } else {
                                       Fluttertoast.showToast(

@@ -27,16 +27,11 @@ class HomePageViewModel extends Model {
 
 
 
-  HomePageViewModel(String tokenLogIn, int num, String companyID) {
-    if(num == 1){
-      print("1");
-      print("token: " + tokenLogIn);
+  HomePageViewModel(int num, String tokenLogIn, Map<String, dynamic> map) {
+    if(num == 1) {
       loadListStakeHolderByNormalSignIn(tokenLogIn);
-    }else{
-      print("2");
-      print("token: " + tokenLogIn);
-      print("company: " + companyID);
-      loadListStakeHolderByGoogleSignIn(tokenLogIn, companyID);
+    } else {
+      loadListStakeHolderByGoogleLogIn(map);
     }
   }
 
@@ -81,9 +76,31 @@ class HomePageViewModel extends Model {
     });
   }
 
-  void loadListStakeHolderByGoogleSignIn (String userToken, String companyID) async {
-    _stakeHolderList = await stakeHolderRepo.stakeHolderList(userToken, companyID);
+  void loadListStakeHolderByGoogleLogIn(Map<String, dynamic> map) async {
+    _isLoading = true;
     notifyListeners();
-  }
 
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setString("token", map['token']);
+    sharedPreferences.setString("stakeHolderID", map['stakeHolderID']);
+    sharedPreferences.setString("stakeHolderName", map['shName']);
+    sharedPreferences.setString("companyID", map['companyId']);
+    sharedPreferences.setString("role", map['role'].toString());
+    sharedPreferences.setString("companyName", map['companyName']);
+    sharedPreferences.setString("shImage", map['shImage']);
+
+    _image = map['shImage'];
+    _stakeHolderID = map['stakeHolderID'];
+    _stakeHolderName = map['shName'];
+    _companyName = map['companyName'];
+
+    String token = sharedPreferences.getString("token");
+    String companyID = sharedPreferences.getString("companyID");
+
+    _stakeHolderList = await stakeHolderRepo.stakeHolderList(token, companyID).whenComplete(() {
+      _stakeHolderList = stakeHolderList;
+      _isLoading = false;
+      notifyListeners();
+    });
+  }
 }

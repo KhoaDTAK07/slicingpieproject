@@ -47,14 +47,24 @@ class CompanyHistoryContributePage extends StatelessWidget {
                               content: CompanyContributionPopUpDetailPage(
                                 model: CompanyContributionDetailViewModel(
                                     companyHistory.listContribute[index].assetId,companyHistory.listContribute[index].namePerson),),
-//                              actions: [
-//                                popup.button(
-//                                  label: 'Close',
-//                                  onPressed: () {
-//                                    Navigator.of(context).pop();
-//                                  },
-//                                ),
-//                              ],
+                              actions: [
+                                popup.button(
+                                  label: 'Close',
+                                  onPressed: ()  {
+//                                    Navigator.pushReplacement(
+//                                      context,
+//                                      MaterialPageRoute(
+//                                        builder: (context) =>
+//                                            CompanyHistoryContributePage(
+//                                              companyHistory:
+//                                              CompanyHistoryContributeViewModel(),
+//                                            ),
+//                                      ),
+//                                    );
+                                      Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
                             );
 
                           },
@@ -194,7 +204,7 @@ class CustomListItemTwo extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0),
       child: SizedBox(
-        height: 90,
+        height: 100,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
