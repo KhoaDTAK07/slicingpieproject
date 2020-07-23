@@ -38,35 +38,27 @@ class CompanyHistoryContributePage extends StatelessWidget {
                         color: (index % 2 == 0) ? Colors.white : Colors.black12,
                         child: GestureDetector(
                           onTap: () {
-                            final popup = BeautifulPopup(
+                            showDialog(
                               context: context,
-                              template: TemplateBlueRocket,
+                              builder: (BuildContext context) {
+                                // return object of type Dialog
+                                return AlertDialog(
+                                  title: new Text("Contribution Detail"),
+                                  content: CompanyContributionPopUpDetailPage(
+                                    model: CompanyContributionDetailViewModel(
+                                        companyHistory.listContribute[index].assetId,companyHistory.listContribute[index].namePerson),),
+                                  actions: <Widget>[
+                                    // usually buttons at the bottom of the dialog
+                                    new FlatButton(
+                                      child: new Text("Close"),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ],
+                                );
+                              },
                             );
-                            popup.show(
-                              title: 'Info',
-                              content: CompanyContributionPopUpDetailPage(
-                                model: CompanyContributionDetailViewModel(
-                                    companyHistory.listContribute[index].assetId,companyHistory.listContribute[index].namePerson),),
-                              actions: [
-                                popup.button(
-                                  label: 'Close',
-                                  onPressed: ()  {
-//                                    Navigator.pushReplacement(
-//                                      context,
-//                                      MaterialPageRoute(
-//                                        builder: (context) =>
-//                                            CompanyHistoryContributePage(
-//                                              companyHistory:
-//                                              CompanyHistoryContributeViewModel(),
-//                                            ),
-//                                      ),
-//                                    );
-                                      Navigator.of(context).pop();
-                                  },
-                                ),
-                              ],
-                            );
-
                           },
                           child: CustomListItemTwo(
                             title: '${companyHistory.listContribute[index].typeAsset} Contribution',
