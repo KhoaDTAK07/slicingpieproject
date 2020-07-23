@@ -62,12 +62,8 @@ class LoginPage2 extends StatelessWidget {
                                         fontSize: 16.0
                                     );
                                   } else {
-                                    await model.checkLogin();
-                                    String tokenLogIn = model.tokenLogIn;
-
-                                    Map<String, dynamic> map = new Map<String,dynamic>();
-
-                                    if(tokenLogIn == "Login Fail") {
+                                    Map<String, dynamic> map = await model.checkLogin();
+                                    if(map.length == 1) {
                                       Fluttertoast.showToast(
                                           msg: "Your Account is inactive",
                                           toastLength: Toast.LENGTH_SHORT,
@@ -78,7 +74,7 @@ class LoginPage2 extends StatelessWidget {
                                       );
                                     } else {
                                       Navigator.push(context,
-                                        MaterialPageRoute(builder: (context) => HomePage(model: HomePageViewModel(1,tokenLogIn,map),),
+                                        MaterialPageRoute(builder: (context) => HomePage(model: HomePageViewModel(map),),
                                         ),
                                       );
                                     }
@@ -118,7 +114,7 @@ class LoginPage2 extends StatelessWidget {
                                   } else {
                                     String tokenLogIn = "anc";
                                     Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) => HomePage(model: HomePageViewModel(2,tokenLogIn,map),),
+                                      MaterialPageRoute(builder: (context) => HomePage(model: HomePageViewModel(map),),
                                       ),
                                     );
                                   }

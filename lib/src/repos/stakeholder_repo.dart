@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 
 abstract class StakeHolderRepo {
   Future<StakeHolderList> stakeHolderList (String tokenUser, String companyID);
+  Future<StakeHolderList> stakeHolderInActiveList (String tokenUser, String companyID);
   Future<bool> addStakeHolder(String addJson);
   Future<StakeHolder> getStakeHolderDetail(String accountID);
   Future<bool> updateStakeHolder(String accountID, String updateJson);
@@ -111,6 +112,28 @@ class StakeHolderRepoImp implements StakeHolderRepo {
       return false;
     }
 
+  }
+
+  @override
+  Future<StakeHolderList> stakeHolderInActiveList(String tokenUser, String companyID) async{
+
+    String apiGetList = APIString.apiGetListStakeHolderInActive(companyID);
+
+    Map<String, String> headersGet = {
+      HttpHeaders.contentTypeHeader: "application/json", // or whatever
+      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
+    };
+
+    http.Response responseGet = await http.get(apiGetList, headers: headersGet);
+    print("------------");
+    print(responseGet.body);
+
+    List<dynamic> list = jsonDecode(responseGet.body);
+
+    StakeHolderList stakeHolderList;
+    stakeHolderList = StakeHolderList.fromJson(list);
+
+    return stakeHolderList;
   }
 
 

@@ -5,15 +5,16 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:slicingpieproject/src/view/add_contribution_page.dart';
+import 'package:slicingpieproject/src/view/company-history-contribute-page.dart';
 import 'package:slicingpieproject/src/view/companysetting_page.dart';
 import 'package:slicingpieproject/src/viewmodel/add_contribution_viewmodel.dart';
+import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/term_list_viewmodel.dart';
 
-class ListTermPage extends StatelessWidget {
+class ListTermHistoryPage extends StatelessWidget {
   final TermListViewModel model;
-  final String stakeHolderID, stakeHolderName;
 
-  ListTermPage({this.model, this.stakeHolderID, this.stakeHolderName});
+  ListTermHistoryPage({this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -33,17 +34,17 @@ class ListTermPage extends StatelessWidget {
             children: <Widget>[
               ScopedModelDescendant<TermListViewModel>(
                   builder: (context, child, model) {
-                if (model.isLoading) {
-                  return LoadingState();
-                } else {
-                  return Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-                      child: _drawSlidable(context, model),
-                    ),
-                  );
-                }
-              })
+                    if (model.isLoading) {
+                      return LoadingState();
+                    } else {
+                      return Expanded(
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+                          child: _drawSlidable(context, model),
+                        ),
+                      );
+                    }
+                  })
             ],
           ),
         ),
@@ -71,26 +72,15 @@ class ListTermPage extends StatelessWidget {
       children: <Widget>[
         GestureDetector(
           onTap: () async {
-            if (model.termList.termList[index].termStatus == "1") {
-              await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AddContributionPage(
-                      model: AddContributionViewmodel(stakeHolderName,
-                          stakeHolderID, model.termList.termList[index].termID),
-                      dateFrom: model.termList.termList[index].termTimeFrom,
-                      dateTo: model.termList.termList[index].termTimeTo,
+            await Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    CompanyHistoryContributePage(
+                      companyHistory: CompanyHistoryContributeViewModel(model.termList.termList[index].termID),
                     ),
-                  )).then((value) => Navigator.of(context).pop());
-            } else {
-              Fluttertoast.showToast(
-                msg: "Sorry, Term already closed!",
-                textColor: Colors.white,
-                toastLength: Toast.LENGTH_SHORT,
-                backgroundColor: Colors.red,
-                gravity: ToastGravity.CENTER,
-              );
-            }
+              ),
+            ).then((value) => model.loadTermList());
           },
           child: Column(
             children: <Widget>[
@@ -105,7 +95,7 @@ class ListTermPage extends StatelessWidget {
                           ((model.termList.termList[index].termSlice / model.getTotalSlice()) * 100).toStringAsFixed(2) + "%",
                       textAlign: TextAlign.left,
                       style:
-                          TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                     ),
                     if (model.termList.termList[index].termStatus == "1")
                       Text(

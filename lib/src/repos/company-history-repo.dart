@@ -10,15 +10,15 @@ import 'package:slicingpieproject/src/model/contribute-list-model.dart';
 
 
 abstract class CompanyHistoryRepo {
-  Future<List<ContributeListModel>> listContribute(String companyID, String tokenUser);
+  Future<List<ContributeListModel>> listContribute(String companyID, String tokenUser, int termID);
   Future<ContributionDetailModel> contributionDetail(String assetID);
   Future<bool> updateContribution(String assetID, String updateJson);
 }
 
 class CompanyHistoryRepoImp implements CompanyHistoryRepo {
   @override
-  Future<List<ContributeListModel>> listContribute(String companyID, String tokenUser) async {
-    String apiGetList = APIString.apiGetContribution(companyID);
+  Future<List<ContributeListModel>> listContribute(String companyID, String tokenUser, int termID) async {
+    String apiGetList = APIString.apiGetContribution(companyID, termID);
     Map<String, String> headersGet = {
       HttpHeaders.contentTypeHeader: "application/json", // or whatever
       HttpHeaders.authorizationHeader: "Bearer $tokenUser",

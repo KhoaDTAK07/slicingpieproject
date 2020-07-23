@@ -4,6 +4,7 @@ import 'package:percent_indicator/percent_indicator.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slicingpieproject/src/view/companysetting_page.dart';
+import 'package:slicingpieproject/src/view/list_term_history_page.dart';
 import 'package:slicingpieproject/src/view/list_term_page.dart';
 import 'package:slicingpieproject/src/view/stakeHolder_add_page.dart';
 import 'package:slicingpieproject/src/view/stakeHolder_detail_page.dart';
@@ -21,6 +22,8 @@ class HomePage extends StatelessWidget {
   final String userToken;
 
   HomePage({Key key, @required this.model, this.userToken}) : super(key: key);
+
+  String stakeHolderID, stakeHolderName;
 
   @override
   Widget build(BuildContext context) {
@@ -98,15 +101,11 @@ class HomePage extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                            await Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    CompanyHistoryContributePage(
-                                  companyHistory:
-                                      CompanyHistoryContributeViewModel(),
-                                ),
+                                builder: (context) => ListTermHistoryPage(model: TermListViewModel(),),
                               ),
                             );
                           },
@@ -200,14 +199,12 @@ class HomePage extends StatelessWidget {
               ),
               body: new TabBarView(
                 children: [
-                  ListViewHome(),
-                  Icon(Icons.directions_transit),
+                  ActiveView(),
+                  InActiveView(),
                 ],
               ),
               floatingActionButton: FloatingActionButton(
                 onPressed: () async{
-                  SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                  String tokenLogIn = sharedPreferences.getString("tokenLogIn");
                   await Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -215,7 +212,7 @@ class HomePage extends StatelessWidget {
                         model: StakeHolderAddViewModel(),
                       ),
                     ),
-                  ).then((value) => model.loadListStakeHolderByNormalSignIn(tokenLogIn));
+                  ).then((value) => model.loadListStakeHolderAfterChange());
                 },
                 child: Icon(Icons.add),
                 backgroundColor: Colors.blue,
@@ -227,7 +224,7 @@ class HomePage extends StatelessWidget {
   }
 }
 
-class ListViewHome extends StatelessWidget {
+class ActiveView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<HomePageViewModel>(
@@ -241,10 +238,6 @@ class ListViewHome extends StatelessWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () async{
-                    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                    String stakeHolderID = sharedPreferences.getString("stakeHolderID");
-                    String tokenLogIn = sharedPreferences.getString("tokenLogIn");
-
                     await Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -252,7 +245,7 @@ class ListViewHome extends StatelessWidget {
                           model: StakeHolderDetailViewModel(model.stakeHolderList.stakeholderList[index].shID),
                         ),
                       ),
-                    ).then((value) => model.loadListStakeHolderByNormalSignIn(tokenLogIn));
+                    ).then((value) => model.loadListStakeHolderAfterChange());
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
@@ -347,7 +340,7 @@ class ListViewHome extends StatelessWidget {
                             lineHeight: 25.0,
                             animationDuration: 2000,
                             percent: (model.stakeHolderList.stakeholderList[index]
-                                    .sliceAssets /
+                                .sliceAssets /
                                 model.getTotalSlice()),
                             center: Text(
                               ((model.stakeHolderList.stakeholderList[index].sliceAssets / model.getTotalSlice()) * 100).toStringAsFixed(2) + "%",
@@ -363,8 +356,8 @@ class ListViewHome extends StatelessWidget {
                             width: double.infinity,
                             height: 52,
                             child: RaisedButton(
-                              onPressed: () {
-                                Navigator.push(
+                              onPressed: () async {
+                                await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => ListTermPage(
@@ -375,17 +368,17 @@ class ListViewHome extends StatelessWidget {
                                           .stakeholderList[index].shName,
                                     ),
                                   ),
-                                );
+                                ).then((value) => model.loadListStakeHolderAfterChange());
                               },
                               child: Text(
                                 'ADD CONTRIBUTION',
                                 style:
-                                    TextStyle(color: Colors.white, fontSize: 18),
+                                TextStyle(color: Colors.white, fontSize: 18),
                               ),
                               color: Colors.red,
                               shape: RoundedRectangleBorder(
                                 borderRadius:
-                                    BorderRadius.all(Radius.circular(6)),
+                                BorderRadius.all(Radius.circular(6)),
                               ),
                             ),
                           ),
@@ -417,11 +410,164 @@ class ListViewHome extends StatelessWidget {
   }
 }
 
-class LoadingState extends StatelessWidget {
+class InActiveView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(),
+    return ScopedModelDescendant<HomePageViewModel>(
+      builder: (context, child, model) {
+        if (model.isLoading) {
+          return LoadingState();
+        } else {
+          return Container(
+            child: ListView.builder(
+              itemCount: model.stakeHolderListInActive.stakeholderList.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(10, 5, 10, 10),
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Container(
+                              padding: EdgeInsets.fromLTRB(140, 0, 0, 5),
+                              child: CircleAvatar(
+                                radius: 53.0,
+                                child: CircleAvatar(
+                                  radius: 50,
+                                  child: ClipOval(
+                                    child: SizedBox(
+                                      width: 180,
+                                      height: 180,
+                                      child: Image.network(
+                                        model.stakeHolderListInActive
+                                            .stakeholderList[index].shImage,
+                                        fit: BoxFit.fill,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(165, 5, 0, 5),
+                              child: Text(
+                                model.stakeHolderListInActive.stakeholderList[index]
+                                    .shName,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(165, 0, 0, 15),
+                              child: Text(
+                                model.stakeHolderListInActive.stakeholderList[index].shJob,
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Text(
+                              'Slice',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              model.stakeHolderListInActive.stakeholderList[index].sliceAssets.toStringAsFixed(2),
+                              textAlign: TextAlign.left,
+                              textDirection: TextDirection.ltr,
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                          child: new LinearPercentIndicator(
+                            animation: true,
+                            lineHeight: 25.0,
+                            animationDuration: 2000,
+//                            percent: (model.stakeHolderListInActive.stakeholderList[index]
+//                                .sliceAssets /
+//                                model.getTotalSlice()),
+//                            center: Text(
+//                              ((model.stakeHolderListInActive.stakeholderList[index].sliceAssets / model.getTotalSlice()) * 100).toStringAsFixed(2) + "%",
+//                              style: TextStyle(fontSize: 15, color: Colors.black, fontWeight: FontWeight.bold),
+//                            ),
+                            linearStrokeCap: LinearStrokeCap.roundAll,
+                            progressColor: Colors.greenAccent,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 10, 0, 15),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 52,
+                            child: RaisedButton(
+                              child: Text(
+                                'ADD CONTRIBUTION',
+                                style:
+                                TextStyle(color: Colors.white, fontSize: 18),
+                              ),
+                              color: Colors.grey,
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(6)),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Expanded(
+                              child: Container(
+                                color: Colors.black12,
+                                width: double.infinity,
+                                height: 2,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          );
+        }
+      },
     );
   }
 }
+

@@ -11,7 +11,7 @@ class CompanyHistoryContributeViewModel extends Model {
 
   List<ContributeListModel> get listContribute => _listContribute;
 
-
+  int termId;
   String tokenUser;
   String companyID;
 
@@ -19,11 +19,12 @@ class CompanyHistoryContributeViewModel extends Model {
 
   bool get isLoading => _isLoading;
 
-  CompanyHistoryContributeViewModel() {
-    getAll();
+  CompanyHistoryContributeViewModel(int termID) {
+    getAll(termID);
+    termId = termID;
   }
 
-  void getAll() async {
+  void getAll(int termID) async {
     final SharedPreferences sharedPreferences =
         await SharedPreferences.getInstance();
 
@@ -33,7 +34,7 @@ class CompanyHistoryContributeViewModel extends Model {
     _isLoading = true;
     notifyListeners();
     _listContribute =
-        await _repo.listContribute(companyID, tokenUser).whenComplete(() {
+        await _repo.listContribute(companyID, tokenUser, termID).whenComplete(() {
       _listContribute = listContribute;
       _isLoading = false;
     });

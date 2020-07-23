@@ -51,7 +51,8 @@ class CompanyHistoryContributePage extends StatelessWidget {
                                     // usually buttons at the bottom of the dialog
                                     new FlatButton(
                                       child: new Text("Close"),
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        await companyHistory.getAll(companyHistory.termId);
                                         Navigator.of(context).pop();
                                       },
                                     ),

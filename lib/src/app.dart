@@ -3,7 +3,6 @@ import 'package:slicingpieproject/src/view/add_contribution_page.dart';
 import 'package:slicingpieproject/src/view/add_founder_page.dart';
 import 'package:slicingpieproject/src/view/add_term_page.dart';
 import 'package:slicingpieproject/src/view/companysetting_page.dart';
-import 'package:slicingpieproject/src/view/list_terms_page.dart';
 import 'package:flutter/material.dart';
 import 'package:slicingpieproject/src/view/login_page2.dart';
 import 'package:slicingpieproject/src/view/member_profile_page.dart';

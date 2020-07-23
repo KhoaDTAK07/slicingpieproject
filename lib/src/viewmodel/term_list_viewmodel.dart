@@ -19,6 +19,13 @@ class TermListViewModel extends Model {
   String get selectedDateFromFormat => _selectedDateFromFormat;
   String get selectedDateToFormat => _selectedDateToFormat;
 
+  double getTotalSlice() {
+    double total = 0;
+    for (int i = 0; i < _termList.termList.length; i++){
+      total += _termList.termList[i].termSlice;
+    }
+    return total;
+  }
 
 
   TermListViewModel() {

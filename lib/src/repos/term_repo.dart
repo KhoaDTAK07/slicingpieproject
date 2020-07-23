@@ -12,6 +12,7 @@ abstract class TermRepo {
   Future<TermList> getTermList(String companyID);
   Future<ProjectList> getProjectList(String termID);
   Future<TypeAssetList> getTypeAssetList(String companyID);
+
 }
 
 class TermRepoImp implements TermRepo {
