@@ -10,6 +10,7 @@ import 'package:slicingpieproject/src/viewmodel/company_switch_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/home_page_viewmodel.dart';
 
 import 'home_page.dart';
+import 'not_found_page.dart';
 
 class ListCompanyPage extends StatelessWidget {
   final CompanySwitchViewModel model;
@@ -36,6 +37,8 @@ class ListCompanyPage extends StatelessWidget {
                   builder: (context, child, model) {
                     if (model.isLoading) {
                       return LoadingState();
+                    } else if (model.companyList == null){
+                      return NotFoundPage();
                     } else {
                       return Expanded(
                         child: Padding(

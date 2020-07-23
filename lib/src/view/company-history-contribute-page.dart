@@ -8,6 +8,8 @@ import 'package:slicingpieproject/src/view/loading_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/company_contribution_detail_viewmodel.dart';
 
+import 'not_found_page.dart';
+
 class CompanyHistoryContributePage extends StatelessWidget {
   final CompanyHistoryContributeViewModel companyHistory;
 
@@ -27,6 +29,8 @@ class CompanyHistoryContributePage extends StatelessWidget {
             builder: (context, child, companyHistory) {
               if (companyHistory.isLoading == true) {
                 return LoadingState();
+              } else if (companyHistory.listContribute == null){
+                return NotFoundPage();
               } else
                 return Padding(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 0),

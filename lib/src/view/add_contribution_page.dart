@@ -1,12 +1,7 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:slicingpieproject/src/view/home_page.dart';
 import 'package:slicingpieproject/src/viewmodel/add_contribution_viewmodel.dart';
-import 'package:slicingpieproject/src/viewmodel/home_page_viewmodel.dart';
 
 class AddContributionPage extends StatelessWidget {
   final AddContributionViewmodel model;
