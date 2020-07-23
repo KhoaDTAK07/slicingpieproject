@@ -7,6 +7,7 @@ import 'package:scoped_model/scoped_model.dart';
 import 'package:slicingpieproject/src/view/add_contribution_page.dart';
 import 'package:slicingpieproject/src/view/company-history-contribute-page.dart';
 import 'package:slicingpieproject/src/view/companysetting_page.dart';
+import 'package:slicingpieproject/src/view/loading_page.dart';
 import 'package:slicingpieproject/src/viewmodel/add_contribution_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/term_list_viewmodel.dart';

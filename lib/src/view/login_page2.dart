@@ -112,7 +112,6 @@ class LoginPage2 extends StatelessWidget {
                                         fontSize: 16.0
                                     );
                                   } else {
-                                    String tokenLogIn = "anc";
                                     Navigator.push(context,
                                       MaterialPageRoute(builder: (context) => HomePage(model: HomePageViewModel(map),),
                                       ),
@@ -124,7 +123,7 @@ class LoginPage2 extends StatelessWidget {
                                   style: TextStyle(
                                       color: Colors.white, fontSize: 18),
                                 ),
-                                color: Color(0xff3277DB),
+                                color: Colors.red,
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(6)),

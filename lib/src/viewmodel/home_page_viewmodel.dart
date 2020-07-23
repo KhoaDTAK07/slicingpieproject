@@ -32,6 +32,41 @@ class HomePageViewModel extends Model {
     loadListStakeHolder(map);
   }
 
+  void loadListStakeHolder(Map<String, dynamic> map) async {
+    _isLoading = true;
+    notifyListeners();
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
+    sharedPreferences.setString("token", map['token']);
+    sharedPreferences.setString("stakeHolderID", map['stakeHolderID']);
+    sharedPreferences.setString("stakeHolderName", map['shName']);
+    sharedPreferences.setString("companyID", map['companyId']);
+    sharedPreferences.setString("role", map['role'].toString());
+    sharedPreferences.setString("companyName", map['companyName']);
+    sharedPreferences.setString("shImage", map['shImage']);
+
+    _image = map['shImage'];
+    _stakeHolderID = map['stakeHolderID'];
+    _stakeHolderName = map['shName'];
+    _companyName = map['companyName'];
+
+    String token = sharedPreferences.getString("token");
+    String companyID = sharedPreferences.getString("companyID");
+
+    //Get StakeHolder inactive list
+    _stakeHolderListInActive = await _stakeHolderRepo.stakeHolderInActiveList(token, companyID).whenComplete(() {
+      _stakeHolderListInActive = stakeHolderListInActive;
+    });
+
+    //Get StakeHolder active list
+    _stakeHolderList = await _stakeHolderRepo.stakeHolderList(token, companyID).whenComplete(() {
+      _stakeHolderList = stakeHolderList;
+      _isLoading = false;
+      notifyListeners();
+    });
+  }
+
   double getTotalSlice() {
     double total = 0;
     for (int i = 0; i < _stakeHolderList.stakeholderList.length; i++){
@@ -64,38 +99,5 @@ class HomePageViewModel extends Model {
     });
   }
 
-  void loadListStakeHolder(Map<String, dynamic> map) async {
-    _isLoading = true;
-    notifyListeners();
-
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("token", map['token']);
-    sharedPreferences.setString("stakeHolderID", map['stakeHolderID']);
-    sharedPreferences.setString("stakeHolderName", map['shName']);
-    sharedPreferences.setString("companyID", map['companyId']);
-    sharedPreferences.setString("role", map['role'].toString());
-    sharedPreferences.setString("companyName", map['companyName']);
-    sharedPreferences.setString("shImage", map['shImage']);
-
-    _image = map['shImage'];
-    _stakeHolderID = map['stakeHolderID'];
-    _stakeHolderName = map['shName'];
-    _companyName = map['companyName'];
-
-    String token = sharedPreferences.getString("token");
-    String companyID = sharedPreferences.getString("companyID");
-
-    //Get StakeHolder inactive list
-    _stakeHolderListInActive = await _stakeHolderRepo.stakeHolderInActiveList(token, companyID).whenComplete(() {
-      _stakeHolderListInActive = stakeHolderListInActive;
-    });
-
-    //Get StakeHolder active list
-    _stakeHolderList = await _stakeHolderRepo.stakeHolderList(token, companyID).whenComplete(() {
-      _stakeHolderList = stakeHolderList;
-      _isLoading = false;
-      notifyListeners();
-    });
-  }
 
 }

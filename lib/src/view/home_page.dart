@@ -6,16 +6,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slicingpieproject/src/view/companysetting_page.dart';
 import 'package:slicingpieproject/src/view/list_term_history_page.dart';
 import 'package:slicingpieproject/src/view/list_term_page.dart';
+import 'package:slicingpieproject/src/view/loading_page.dart';
+import 'package:slicingpieproject/src/view/not_found_page.dart';
 import 'package:slicingpieproject/src/view/stakeHolder_add_page.dart';
 import 'package:slicingpieproject/src/view/stakeHolder_detail_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/company_setting_viewmodel.dart';
+import 'package:slicingpieproject/src/viewmodel/company_switch_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/home_page_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/stakeHolder_add_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/stakeHolder_detail_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/term_list_viewmodel.dart';
 
 import 'company-history-contribute-page.dart';
+import 'company_list_page.dart';
 
 class HomePage extends StatelessWidget {
   final HomePageViewModel model;
@@ -153,7 +157,14 @@ class HomePage extends StatelessWidget {
                                 fontSize: 16, fontWeight: FontWeight.bold),
                           ),
                           onTap: () {
-                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ListCompanyPage(
+                                  model: CompanySwitchViewModel(),
+                                ),
+                              ),
+                            );
                           },
                           leading: Icon(
                             Icons.swap_horiz,
@@ -417,6 +428,8 @@ class InActiveView extends StatelessWidget {
       builder: (context, child, model) {
         if (model.isLoading) {
           return LoadingState();
+        } else if (model.stakeHolderListInActive == null){
+          return NotFoundPage();
         } else {
           return Container(
             child: ListView.builder(

@@ -51,6 +51,16 @@ class APIString {
     String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID;
     return url;
   }
+
+  static String apiGetListCompany(String companyID, String accountID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/StackHolders/list-company/$companyID/$accountID";
+    return url;
+  }
+
+  static String apiSwitchCompany(String companyID, String accountID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/Login/switch-account/$accountID/$companyID";
+    return url;
+  }
   //------------------------------------------------------------------------------------------------------
 
   //---------------------------------- API Projects -------------------------------------------------------

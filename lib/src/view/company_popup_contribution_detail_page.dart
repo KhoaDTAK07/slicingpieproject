@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:slicingpieproject/src/view/company_contribution_detail_page.dart';
 import 'package:slicingpieproject/src/view/companysetting_page.dart';
+import 'package:slicingpieproject/src/view/loading_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company_contribution_detail_viewmodel.dart';
 
 class CompanyContributionPopUpDetailPage extends StatelessWidget {

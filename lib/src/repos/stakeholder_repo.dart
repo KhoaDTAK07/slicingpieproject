@@ -128,12 +128,18 @@ class StakeHolderRepoImp implements StakeHolderRepo {
     print("------------");
     print(responseGet.body);
 
-    List<dynamic> list = jsonDecode(responseGet.body);
+    int statusCode = responseGet.statusCode;
+    if(statusCode != 404) {
+      List<dynamic> list = jsonDecode(responseGet.body);
 
-    StakeHolderList stakeHolderList;
-    stakeHolderList = StakeHolderList.fromJson(list);
+      StakeHolderList stakeHolderList;
+      stakeHolderList = StakeHolderList.fromJson(list);
 
-    return stakeHolderList;
+      return stakeHolderList;
+    } else {
+      return null;
+    }
+
   }
 
 

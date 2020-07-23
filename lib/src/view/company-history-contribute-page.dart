@@ -4,6 +4,7 @@ import 'package:intl/intl.dart' as intl;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:slicingpieproject/src/view/company_popup_contribution_detail_page.dart';
 import 'package:slicingpieproject/src/view/companysetting_page.dart';
+import 'package:slicingpieproject/src/view/loading_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/company_contribution_detail_viewmodel.dart';
 
