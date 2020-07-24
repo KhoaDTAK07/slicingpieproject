@@ -69,8 +69,7 @@ class ListTermPage extends StatelessWidget {
     );
   }
 
-  Widget _getListTerm(
-      BuildContext context, int index, TermListViewModel model) {
+  Widget _getListTerm(BuildContext context, int index, TermListViewModel model) {
     return Column(
       children: <Widget>[
         GestureDetector(

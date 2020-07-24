@@ -4,10 +4,11 @@ import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:slicingpieproject/src/model/term_model.dart';
 import 'package:slicingpieproject/src/model/user_login_detail_model.dart';
 import 'package:slicingpieproject/src/repos/stakeholder_repo.dart';
+import 'package:slicingpieproject/src/repos/term_repo.dart';
 import 'package:slicingpieproject/src/repos/user_login_detail_repo.dart';
 
 class HomePageViewModel extends Model {
-  UserDetailRepo _userDetailRepo = UserDetailRepoImp();
+  TermRepo _termRepo = TermRepoImp();
   StakeHolderRepo _stakeHolderRepo = StakeHolderRepoImp();
 
   String _image, _stakeHolderID, _stakeHolderName, _companyName;
@@ -59,12 +60,18 @@ class HomePageViewModel extends Model {
       _stakeHolderListInActive = stakeHolderListInActive;
     });
 
+    //Get Term list
+    _termList = await _termRepo.getTermList(companyID).whenComplete(() {
+      _termList = termList;
+    });
+
     //Get StakeHolder active list
     _stakeHolderList = await _stakeHolderRepo.stakeHolderList(token, companyID).whenComplete(() {
       _stakeHolderList = stakeHolderList;
       _isLoading = false;
       notifyListeners();
     });
+
   }
 
   double getTotalSlice() {
@@ -88,6 +95,11 @@ class HomePageViewModel extends Model {
     //Get StakeHolder inactive list
     _stakeHolderListInActive = await _stakeHolderRepo.stakeHolderInActiveList(token, companyID).whenComplete(() {
       _stakeHolderListInActive = stakeHolderListInActive;
+    });
+
+    //Get Term list
+    _termList = await _termRepo.getTermList(companyID).whenComplete(() {
+      _termList = termList;
     });
 
     //Get StakeHolder active list
