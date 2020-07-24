@@ -12,6 +12,8 @@ abstract class TermRepo {
   Future<TermList> getTermList(String companyID);
   Future<ProjectList> getProjectList(String termID);
   Future<TypeAssetList> getTypeAssetList(String companyID);
+  Future<bool> createNewTerm(String companyID);
+  Future<bool> endTerm(int termID);
 }
 
 class TermRepoImp implements TermRepo {
@@ -83,6 +85,61 @@ class TermRepoImp implements TermRepo {
     assetList = TypeAssetList.fromJson(list);
 
     return assetList;
+  }
+
+  @override
+  Future<bool> createNewTerm(String companyID) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String tokenUser = sharedPreferences.getString("token");
+    Map<String, String> map = Map();
+    map["TermTimeFrom"] = DateTime.now().toString();
+    map["TermTimeTo"] = DateTime.now().toString();
+    map["CompanyId"] = companyID;
+    map["TermName"] = "Junk";
+
+    String json = jsonEncode(map);
+
+    String apiCreateTerm = APIString.apiCreateTermInCompany(companyID);
+    print(apiCreateTerm);
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
+    };
+
+    http.Response response = await http.post(apiCreateTerm, headers: headers, body: json);
+    bool isAdded;
+      print(response.body);
+    if(response.statusCode == 204) {
+      isAdded = true;
+      return isAdded;
+    } else {
+      isAdded = false;
+      return isAdded;
+    }
+
+  }
+
+  @override
+  Future<bool> endTerm(int termID) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String tokenUser = sharedPreferences.getString("token");
+    String apiEndTerm = APIString.apiEndTerm(termID);
+
+    Map<String, String> headers = {
+      HttpHeaders.contentTypeHeader: "application/json",
+      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
+    };
+
+    http.Response response = await http.put(apiEndTerm, headers: headers);
+    bool isSuccess;
+    print(response.statusCode);
+    if(response.statusCode == 204) {
+      isSuccess = true;
+      return isSuccess;
+    } else {
+      isSuccess = false;
+      return isSuccess;
+    }
   }
 
 }

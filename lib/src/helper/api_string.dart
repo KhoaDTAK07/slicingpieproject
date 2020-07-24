@@ -46,6 +46,39 @@ class APIString {
     String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID;
     return url;
   }
+  static String apiGetProjectListInCompany(String companyID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID + "/project";
+    return url;
+  }
+
+  static String apiAddProjectInCompany(String companyID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID + "/project";
+    return url;
+  }
+
+  static String apiUpdateProjectInCompany(String companyID, String projectID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID + "/project/" + projectID;
+    return url;
+  }
+  static String apiCreateTermInCompany(String companyID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID + "/create-term";
+    return url;
+  }
+
+  static String apiGetProjectInTerm(int termID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/term/" + termID.toString() + "/project";
+    return url;
+  }
+  static String apiAddProjectInTerm(int termID, String projectID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/term/" + termID.toString() + "/project/" + projectID;
+    return url;
+  }
+  static String apiEndTerm(int termID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/term-done/" + termID.toString();
+    return url;
+  }
+
+
   //------------------------------------------------------------------------------------------------------
 
   //---------------------------------- API Projects -------------------------------------------------------
@@ -53,6 +86,7 @@ class APIString {
     String url = "https://slicingpiepj.azurewebsites.net/api/Companies/term/" + termID + "/project";
     return url;
   }
+
 
   //------------------------------------------------------------------------------------------------------
   //---------------------------------- API Assets --------------------------------------------------

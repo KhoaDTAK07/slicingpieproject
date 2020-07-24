@@ -11,6 +11,17 @@ class Project {
       companyID: json['companyId'],
     );
   }
+
+
+  Map<String, dynamic> toJson() =>
+  {
+  "ProjectId": projectID,
+  "ProjectName": projectName,
+  "ProjectStatus": projectStatus,
+    "CompanyId" : companyID,
+  };
+
+
 }
 
 class ProjectList {
@@ -29,3 +40,4 @@ class ProjectList {
   }
 
 }
+

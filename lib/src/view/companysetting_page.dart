@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:slicingpieproject/src/view/project_list_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company_setting_viewmodel.dart';
+
+import 'company_termlist_page.dart';
 
 class CompanySettingPage extends StatelessWidget {
   final CompanySettingViewModel model;
@@ -220,7 +223,12 @@ class CompanySettingPage extends StatelessWidget {
                       height: 40,
                       child: RaisedButton(
                         color: Colors.blue,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ProjectListPage()),
+                          );
+                        },
                         child: Row(
                           children: <Widget>[
                             Expanded(
@@ -243,7 +251,43 @@ class CompanySettingPage extends StatelessWidget {
                           ],
                         ),
                       ),
-                    )
+                    ),
+                    SizedBox(height: 30),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 40,
+                      child: RaisedButton(
+                        color: Colors.blue,
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => TermListPage()),
+                          );
+                        },
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(
+                              flex: 9,
+                              child: Text(
+                                "Term",
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 18),
+                              ),
+                            ),
+                            Expanded(
+                              flex: 1,
+                              child: IconButton(
+                                icon: const Icon(
+                                  Icons.arrow_forward,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 30),
                   ],
                 ),
               ),
