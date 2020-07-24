@@ -21,8 +21,26 @@ class ProjectListInTermPage extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: RaisedButton(
-                      onPressed: () {
-                        model.endTerm(termID);
+                      onPressed: () async {
+                       bool isSuccess = await model.endTerm(termID);
+                        if(isSuccess) {
+                          Fluttertoast.showToast(
+                            msg: "Success",
+                            textColor: Colors.green,
+                            toastLength: Toast.LENGTH_SHORT,
+                            backgroundColor: Colors.white,
+                            gravity: ToastGravity.CENTER,
+                          );
+                          Navigator.of(context).pop();
+                        } else {
+                          Fluttertoast.showToast(
+                            msg: "Fail",
+                            textColor: Colors.red,
+                            toastLength: Toast.LENGTH_SHORT,
+                            backgroundColor: Colors.white,
+                            gravity: ToastGravity.CENTER,
+                          );
+                        }
                       },
                       color: Colors.red,
                       child: Text(
