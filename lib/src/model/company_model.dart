@@ -35,3 +35,22 @@ class Company {
       };
 
 }
+
+class CompanyList {
+  List<Company> companyList;
+
+  CompanyList({
+    this.companyList,
+  });
+
+  factory CompanyList.fromJson(List<dynamic> parsedJson){
+
+    List<Company> companies = new List<Company>();
+
+    companies = parsedJson.map((i) => Company.fromJson(i)).toList();
+
+    return new CompanyList(
+      companyList: companies,
+    );
+  }
+}

@@ -62,15 +62,7 @@ class LoginViewModel2 extends Model {
     }
 
     if(_isReady == true){
-      _isLoading = true;
-      notifyListeners();
-
-      _tokenLogIn = await _loginRepo.checkNormalLogin(_email.value, _password.value);
-      if(_tokenLogIn != null) {
-        _tokenLogIn = tokenLogIn;
-        _isLoading = false;
-        notifyListeners();
-      }
+      return _loginRepo.checkNormalLogin(_email.value, _password.value);
     }
 
   }

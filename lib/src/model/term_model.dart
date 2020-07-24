@@ -1,8 +1,9 @@
 class Term {
   final int termID;
-  final String termName, termTimeFrom, termTimeTo;
+  final String termName, termTimeFrom, termTimeTo, termStatus;
+  final double termSlice;
 
-  Term({this.termID, this.termName, this.termTimeFrom, this.termTimeTo});
+  Term({this.termID, this.termName, this.termSlice, this.termTimeFrom, this.termTimeTo, this.termStatus});
 
   factory Term.fromJson(Map<String, dynamic> json) {
     return Term(
@@ -10,6 +11,8 @@ class Term {
       termTimeFrom: json['termTimeFrom'],
       termTimeTo: json['termTimeTo'],
       termName: json['termName'],
+      termSlice: json['termSliceTotal'],
+      termStatus: json['termStatus'],
     );
   }
 

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:slicingpieproject/src/view/project_list_page.dart';
+import 'package:slicingpieproject/src/view/loading_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company_setting_viewmodel.dart';
 
 import 'company_termlist_page.dart';
@@ -299,12 +300,3 @@ class CompanySettingPage extends StatelessWidget {
   }
 }
 
-class LoadingState extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-}

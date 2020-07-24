@@ -4,8 +4,11 @@ import 'package:intl/intl.dart' as intl;
 import 'package:scoped_model/scoped_model.dart';
 import 'package:slicingpieproject/src/view/company_popup_contribution_detail_page.dart';
 import 'package:slicingpieproject/src/view/companysetting_page.dart';
+import 'package:slicingpieproject/src/view/loading_page.dart';
 import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/company_contribution_detail_viewmodel.dart';
+
+import 'not_found_page.dart';
 
 class CompanyHistoryContributePage extends StatelessWidget {
   final CompanyHistoryContributeViewModel companyHistory;
@@ -26,6 +29,8 @@ class CompanyHistoryContributePage extends StatelessWidget {
             builder: (context, child, companyHistory) {
               if (companyHistory.isLoading == true) {
                 return LoadingState();
+              } else if (companyHistory.listContribute == null){
+                return NotFoundPage();
               } else
                 return Padding(
                   padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
@@ -51,7 +56,8 @@ class CompanyHistoryContributePage extends StatelessWidget {
                                     // usually buttons at the bottom of the dialog
                                     new FlatButton(
                                       child: new Text("Close"),
-                                      onPressed: () {
+                                      onPressed: () async {
+                                        await companyHistory.getAll(companyHistory.termId);
                                         Navigator.of(context).pop();
                                       },
                                     ),

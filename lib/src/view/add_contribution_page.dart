@@ -1,12 +1,7 @@
-import 'dart:collection';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:slicingpieproject/src/view/home_page.dart';
 import 'package:slicingpieproject/src/viewmodel/add_contribution_viewmodel.dart';
-import 'package:slicingpieproject/src/viewmodel/home_page_viewmodel.dart';
 
 class AddContributionPage extends StatelessWidget {
   final AddContributionViewmodel model;
@@ -126,10 +121,6 @@ class AddContributionPage extends StatelessWidget {
                                     30, 30, 30, 0),
                                 child: RaisedButton(
                                   onPressed: () async {
-                                    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-                                    String companyID = sharedPreferences.getString("companyID");
-                                    String tokenLogIn = sharedPreferences.getString("tokenLogIn");
-
                                     bool isCreate = await model.addContribution();
                                     print(isCreate);
                                     if(isCreate) {
@@ -140,9 +131,7 @@ class AddContributionPage extends StatelessWidget {
                                         backgroundColor: Colors.white,
                                         gravity: ToastGravity.CENTER,
                                       );
-//                                      Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-//                                          HomePage(model: HomePageViewModel(tokenLogIn,1,companyID),)), (Route<dynamic> route) => false);
-
+                                      Navigator.of(context).pop();
                                     } else {
                                       Fluttertoast.showToast(
                                         msg: "Add Contribution fail",
@@ -155,7 +144,7 @@ class AddContributionPage extends StatelessWidget {
                                     }
                                   },
                                   child: Text(
-                                    "Add new Tool",
+                                    "Add new Contribution",
                                     style: TextStyle(
                                         color: Colors.white, fontSize: 18),
                                   ),

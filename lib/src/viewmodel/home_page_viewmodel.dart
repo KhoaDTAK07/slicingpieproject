@@ -4,11 +4,12 @@ import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:slicingpieproject/src/model/term_model.dart';
 import 'package:slicingpieproject/src/model/user_login_detail_model.dart';
 import 'package:slicingpieproject/src/repos/stakeholder_repo.dart';
+import 'package:slicingpieproject/src/repos/term_repo.dart';
 import 'package:slicingpieproject/src/repos/user_login_detail_repo.dart';
 
 class HomePageViewModel extends Model {
-  UserDetailRepo userDetailRepo = UserDetailRepoImp();
-  StakeHolderRepo stakeHolderRepo = StakeHolderRepoImp();
+  TermRepo _termRepo = TermRepoImp();
+  StakeHolderRepo _stakeHolderRepo = StakeHolderRepoImp();
 
   String _image, _stakeHolderID, _stakeHolderName, _companyName;
 
@@ -25,62 +26,19 @@ class HomePageViewModel extends Model {
   TermList get termList => _termList;
   bool get isLoading => _isLoading;
 
+  StakeHolderList _stakeHolderListInActive;
+  StakeHolderList get stakeHolderListInActive => _stakeHolderListInActive;
 
-
-  HomePageViewModel(int num, String tokenLogIn, Map<String, dynamic> map) {
-    if(num == 1) {
-      loadListStakeHolderByNormalSignIn(tokenLogIn);
-    } else {
-      loadListStakeHolderByGoogleLogIn(map);
-    }
+  HomePageViewModel(Map<String, dynamic> map) {
+    loadListStakeHolder(map);
   }
 
-
-  double getTotalSlice() {
-    double total = 0;
-    for (int i = 0; i < _stakeHolderList.stakeholderList.length; i++){
-      total += _stakeHolderList.stakeholderList[i].sliceAssets;
-    }
-    return total;
-  }
-
-
-  void loadListStakeHolderByNormalSignIn (String tokenLogIn) async {
-    _isLoading = true;
-    notifyListeners();
-
-    UserDetail userDetail = await userDetailRepo.fetchUserLoginDetail(tokenLogIn);
-
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString("tokenLogIn", tokenLogIn);
-    sharedPreferences.setString("token", userDetail.token);
-    sharedPreferences.setString("stakeHolderID", userDetail.stakeHolderID);
-    sharedPreferences.setString("stakeHolderName", userDetail.stakeHolderName);
-    sharedPreferences.setString("companyID", userDetail.companyID);
-    sharedPreferences.setString("role", userDetail.role.toString());
-    sharedPreferences.setString("companyName", userDetail.companyName);
-    sharedPreferences.setString("shImage", userDetail.image);
-
-    _image = userDetail.image;
-    _stakeHolderID = userDetail.stakeHolderID;
-    _stakeHolderName = userDetail.stakeHolderName;
-    _companyName = userDetail.companyName;
-
-    String token = sharedPreferences.getString("token");
-    String companyID = sharedPreferences.getString("companyID");
-
-    _stakeHolderList = await stakeHolderRepo.stakeHolderList(token, companyID).whenComplete(() {
-      _stakeHolderList = stakeHolderList;
-      _isLoading = false;
-      notifyListeners();
-    });
-  }
-
-  void loadListStakeHolderByGoogleLogIn(Map<String, dynamic> map) async {
+  void loadListStakeHolder(Map<String, dynamic> map) async {
     _isLoading = true;
     notifyListeners();
 
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.clear();
     sharedPreferences.setString("token", map['token']);
     sharedPreferences.setString("stakeHolderID", map['stakeHolderID']);
     sharedPreferences.setString("stakeHolderName", map['shName']);
@@ -97,10 +55,61 @@ class HomePageViewModel extends Model {
     String token = sharedPreferences.getString("token");
     String companyID = sharedPreferences.getString("companyID");
 
-    _stakeHolderList = await stakeHolderRepo.stakeHolderList(token, companyID).whenComplete(() {
+    //Get StakeHolder inactive list
+    _stakeHolderListInActive = await _stakeHolderRepo.stakeHolderInActiveList(token, companyID).whenComplete(() {
+      _stakeHolderListInActive = stakeHolderListInActive;
+    });
+
+    //Get Term list
+    _termList = await _termRepo.getTermList(companyID).whenComplete(() {
+      _termList = termList;
+    });
+
+    //Get StakeHolder active list
+    _stakeHolderList = await _stakeHolderRepo.stakeHolderList(token, companyID).whenComplete(() {
       _stakeHolderList = stakeHolderList;
       _isLoading = false;
       notifyListeners();
     });
+
   }
+
+  double getTotalSlice() {
+    double total = 0;
+    for (int i = 0; i < _stakeHolderList.stakeholderList.length; i++){
+      total += _stakeHolderList.stakeholderList[i].sliceAssets;
+    }
+    return total;
+  }
+
+
+  void loadListStakeHolderAfterChange () async {
+    _isLoading = true;
+    notifyListeners();
+
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    String token = sharedPreferences.getString("token");
+    String companyID = sharedPreferences.getString("companyID");
+
+    //Get StakeHolder inactive list
+    _stakeHolderListInActive = await _stakeHolderRepo.stakeHolderInActiveList(token, companyID).whenComplete(() {
+      _stakeHolderListInActive = stakeHolderListInActive;
+    });
+
+    //Get Term list
+    _termList = await _termRepo.getTermList(companyID).whenComplete(() {
+      _termList = termList;
+    });
+
+    //Get StakeHolder active list
+    _stakeHolderList = await _stakeHolderRepo.stakeHolderList(token, companyID).whenComplete(() {
+      _stakeHolderList = stakeHolderList;
+
+      _isLoading = false;
+      notifyListeners();
+    });
+  }
+
+
 }

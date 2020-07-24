@@ -7,32 +7,43 @@ import 'package:slicingpieproject/src/model/user_login_model.dart';
 import 'package:http/http.dart' as http;
 
 abstract class LoginRepo {
-  Future<String> checkNormalLogin(String email, String password);
+  Future<dynamic> checkNormalLogin(String email, String password);
   Future<dynamic> checkGoogleLogin();
 }
 
 class LoginRepoImp implements LoginRepo {
 
   @override
-  Future<String> checkNormalLogin(String email, String password) async{
+  Future<dynamic> checkNormalLogin(String email, String password) async{
     String apiCheckFirebase = APIString.apiCheckFirebaseNormalLogin();
-    String jsonLogin = jsonEncode(UserLogin(email,password).toJson());
+    String jsonLogin = jsonEncode(UserLogin(email.trim(),password.trim()).toJson());
 
     http.Response responseCheckFirebase = await http.post(apiCheckFirebase, body: jsonLogin);
 
-    int statusCode = responseCheckFirebase.statusCode;
+    Map<String, dynamic> map = jsonDecode(responseCheckFirebase.body);
+    print("---abc: " + responseCheckFirebase.body);
+
+    String tokenLogIn = map['idToken'];
+
+    Map<String, String> header = {
+      HttpHeaders.authorizationHeader: tokenLogIn,
+    };
+
+    String apiLogin = APIString.apiLogin();
+    http.Response responseAPILogin = await http.post(apiLogin, headers: header);
+    print("2: " + responseAPILogin.body);
+
+    int statusCode = responseAPILogin.statusCode;
     print("Status Code: " + statusCode.toString());
 
-    if(statusCode != 400) {
-      Map<String, dynamic> map = jsonDecode(responseCheckFirebase.body);
-      String idToken = map['idToken'];
-      print("--id--");
-      print(idToken);
-
-      return idToken;
+    if(statusCode != 401) {
+      Map<String, dynamic> json = jsonDecode(responseAPILogin.body);
+      return json;
 
     } else {
-      return "Login Fail";
+      Map<String, dynamic> map = new Map<String,dynamic>();
+      map['StatusCode'] = 401;
+      return map;
     }
 
   }

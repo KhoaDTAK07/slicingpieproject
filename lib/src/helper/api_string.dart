@@ -25,6 +25,11 @@ class APIString {
     return url;
   }
 
+  static String apiGetListStakeHolderInActive(String companyID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID + "/stake-holder-inactive";
+    return url;
+  }
+
   static String apiAddStakeHolder() {
     String url = "https://slicingpiepj.azurewebsites.net/api/StackHolders/company/";
     return url;
@@ -56,6 +61,16 @@ class APIString {
     return url;
   }
 
+
+  static String apiGetListCompany(String companyID, String accountID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/StackHolders/list-company/$companyID/$accountID";
+    return url;
+  }
+
+  static String apiSwitchCompany(String companyID, String accountID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/Login/switch-account/$accountID/$companyID";
+    return url;
+  }
   static String apiUpdateProjectInCompany(String companyID, String projectID) {
     String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID + "/project/" + projectID;
     return url;
@@ -98,8 +113,8 @@ class APIString {
     String url = "https://slicingpiepj.azurewebsites.net/api/SliceAsset/company/" + companyID + "/stake-holer/" + stakeHolderID + "/contribution";
     return url;
   }
-  static String apiGetContribution(String companyID) {
-    String url = 'https://slicingpiepj.azurewebsites.net/api/Companies/$companyID/Contribution';
+  static String apiGetContribution(String companyID, int termID) {
+    String url = 'https://slicingpiepj.azurewebsites.net/api/Companies/$companyID/term/$termID/contribution';
     return url;
   }
 
