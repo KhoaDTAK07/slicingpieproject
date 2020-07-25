@@ -216,4 +216,8 @@ class StakeHolderDetailViewModel extends Model {
     }
   }
 
+  Future<bool> deleteStakeHolder(String accountID) {
+    return _stakeHolderRepo.deleteStakeHolder(accountID);
+  }
+
 }

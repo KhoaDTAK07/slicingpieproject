@@ -1,8 +1,10 @@
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slicingpieproject/src/model/overview_model.dart';
 import 'package:slicingpieproject/src/model/stakeholder_model.dart';
 import 'package:slicingpieproject/src/model/term_model.dart';
 import 'package:slicingpieproject/src/model/user_login_detail_model.dart';
+import 'package:slicingpieproject/src/repos/company_detail_repo.dart';
 import 'package:slicingpieproject/src/repos/stakeholder_repo.dart';
 import 'package:slicingpieproject/src/repos/term_repo.dart';
 import 'package:slicingpieproject/src/repos/user_login_detail_repo.dart';
@@ -10,6 +12,7 @@ import 'package:slicingpieproject/src/repos/user_login_detail_repo.dart';
 class HomePageViewModel extends Model {
   TermRepo _termRepo = TermRepoImp();
   StakeHolderRepo _stakeHolderRepo = StakeHolderRepoImp();
+  CompanyRepo _companyRepo = CompanyRepoImp();
 
   String _image, _stakeHolderID, _stakeHolderName, _companyName;
 
@@ -18,10 +21,12 @@ class HomePageViewModel extends Model {
   String get stakeHolderName => _stakeHolderName;
   String get companyName => _companyName;
 
+  OverView _overView;
   StakeHolderList _stakeHolderList;
   TermList _termList;
   bool _isLoading = false;
 
+  OverView get overView => _overView;
   StakeHolderList get stakeHolderList => _stakeHolderList;
   TermList get termList => _termList;
   bool get isLoading => _isLoading;
@@ -54,6 +59,11 @@ class HomePageViewModel extends Model {
 
     String token = sharedPreferences.getString("token");
     String companyID = sharedPreferences.getString("companyID");
+
+    //Get Company Overview
+    _overView = await _companyRepo.getCompanyOverview().whenComplete(() {
+      _overView = overView;
+    });
 
     //Get StakeHolder inactive list
     _stakeHolderListInActive = await _stakeHolderRepo.stakeHolderInActiveList(token, companyID).whenComplete(() {
@@ -91,6 +101,11 @@ class HomePageViewModel extends Model {
 
     String token = sharedPreferences.getString("token");
     String companyID = sharedPreferences.getString("companyID");
+
+    //Get Company Overview
+    _overView = await _companyRepo.getCompanyOverview().whenComplete(() {
+      _overView = overView;
+    });
 
     //Get StakeHolder inactive list
     _stakeHolderListInActive = await _stakeHolderRepo.stakeHolderInActiveList(token, companyID).whenComplete(() {

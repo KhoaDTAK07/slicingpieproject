@@ -1,13 +1,16 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:slicingpieproject/src/helper/api_string.dart';
 import 'package:slicingpieproject/src/model/company_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:slicingpieproject/src/model/overview_model.dart';
 
 abstract class CompanyRepo {
   Future<Company> companyDetail(String companyID, String tokenUser);
   Future<Company> updateCompany(String companyID,String json, String tokenUser);
+  Future<OverView> getCompanyOverview();
 }
 
 class CompanyRepoImp implements CompanyRepo{
@@ -45,6 +48,30 @@ class CompanyRepoImp implements CompanyRepo{
     company1 = Company.fromJson(company);
 
     return company1;
+  }
+
+  @override
+  Future<OverView> getCompanyOverview() async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String companyID = sharedPreferences.getString("companyID");
+    String tokenUser = sharedPreferences.getString("token");
+
+    String apiGetCompanyOverview = APIString.apiGetOverView(companyID);
+
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json", // or whatever
+      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
+    };
+
+    http.Response response = await http.get(apiGetCompanyOverview, headers: header);
+    print("Overview: " + response.body);
+
+    Map<String, dynamic> map = jsonDecode(response.body);
+
+    OverView overview;
+    overview = OverView.fromJson(map);
+
+    return overview;
   }
 
 }

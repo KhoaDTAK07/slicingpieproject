@@ -13,6 +13,7 @@ abstract class StakeHolderRepo {
   Future<bool> addStakeHolder(String addJson);
   Future<StakeHolder> getStakeHolderDetail(String accountID);
   Future<bool> updateStakeHolder(String accountID, String updateJson);
+  Future<bool> deleteStakeHolder(String accountID);
 }
 
 class StakeHolderRepoImp implements StakeHolderRepo {
@@ -140,6 +141,30 @@ class StakeHolderRepoImp implements StakeHolderRepo {
       return null;
     }
 
+  }
+
+  @override
+  Future<bool> deleteStakeHolder(String accountID) async{
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    String companyID = sharedPreferences.getString("companyID");
+    String tokenUser = sharedPreferences.getString("token");
+
+    String apiDelete = APIString.apiDeleteStakeHolder(companyID, accountID);
+
+    Map<String, String> header = {
+      HttpHeaders.contentTypeHeader: "application/json", // or whatever
+      HttpHeaders.authorizationHeader: "Bearer $tokenUser",
+    };
+
+    http.Response response = await http.delete(apiDelete, headers: header);
+    print("Response: " + response.body);
+
+    int statusCode = response.statusCode;
+    print("statusCode: " +statusCode.toString());
+    if(statusCode == 204)
+      return true;
+    else
+      return false;
   }
 
 

@@ -44,9 +44,19 @@ class APIString {
     String url = "https://slicingpiepj.azurewebsites.net/api/StackHolders/";
     return url;
   }
+
+  static String apiDeleteStakeHolder(String companyID, String accountID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/StackHolders/$companyID/$accountID";
+    return url;
+  }
   //------------------------------------------------------------------------------------------------------
 
   //---------------------------------- API Company -------------------------------------------------------
+  static String apiGetOverView(String companyID) {
+    String url = "https://slicingpiepj.azurewebsites.net/api/Companies/$companyID/over-view";
+    return url;
+  }
+
   static String apiCompanySetting(String companyID) {
     String url = "https://slicingpiepj.azurewebsites.net/api/Companies/" + companyID;
     return url;

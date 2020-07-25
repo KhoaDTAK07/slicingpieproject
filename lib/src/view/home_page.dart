@@ -9,18 +9,18 @@ import 'package:slicingpieproject/src/view/companysetting_page.dart';
 import 'package:slicingpieproject/src/view/list_term_history_page.dart';
 import 'package:slicingpieproject/src/view/list_term_page.dart';
 import 'package:slicingpieproject/src/view/loading_page.dart';
+import 'package:slicingpieproject/src/view/login_page2.dart';
 import 'package:slicingpieproject/src/view/not_found_page.dart';
+import 'package:slicingpieproject/src/view/profile_page.dart';
 import 'package:slicingpieproject/src/view/stakeHolder_add_page.dart';
 import 'package:slicingpieproject/src/view/stakeHolder_detail_page.dart';
-import 'package:slicingpieproject/src/viewmodel/company-history-contribute-vm.dart';
 import 'package:slicingpieproject/src/viewmodel/company_setting_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/company_switch_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/home_page_viewmodel.dart';
+import 'package:slicingpieproject/src/viewmodel/login_viewmodel2.dart';
 import 'package:slicingpieproject/src/viewmodel/stakeHolder_add_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/stakeHolder_detail_viewmodel.dart';
 import 'package:slicingpieproject/src/viewmodel/term_list_viewmodel.dart';
-
-import 'company-history-contribute-page.dart';
 import 'company_list_page.dart';
 
 class HomePage extends StatelessWidget {
@@ -64,8 +64,18 @@ class HomePage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      onTap: () {
-                        Navigator.pop(context);
+                      onTap: () async {
+                        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                        String stakeHolderID = sharedPreferences.getString("stakeHolderID");
+                        print(stakeHolderID);
+                        await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProfilePage(
+                              model: StakeHolderDetailViewModel(stakeHolderID),
+                            ),
+                          ),
+                        ).then((value) => model.loadListStakeHolderAfterChange());
                       },
                       leading: Icon(
                         Icons.account_circle,
@@ -152,8 +162,11 @@ class HomePage extends StatelessWidget {
                         style: TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                      onTap: () {
-                        Navigator.pop(context);
+                      onTap: () async {
+                        final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+                        await sharedPreferences.clear();
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
+                            LoginPage2(LoginViewModel2())), (Route<dynamic> route) => false);
                       },
                       leading: Icon(
                         Icons.exit_to_app,
@@ -216,178 +229,186 @@ class HomePage extends StatelessWidget {
 class OverviewTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                child: CircleAvatar(
-                  radius: 110,
-                  backgroundColor: Colors.greenAccent,
-                  child: ClipOval(
-                    child: SizedBox(
-                      width: 200,
-                      height: 200,
-                      child: Image.network(
-                        'https://firebasestorage.googleapis.com/v0/b/swdslicingpie-59d47.appspot.com/o/person1.jpg?alt=media&token=19421098-9a43-48e9-976d-c46e84076ebb',
+    return ScopedModelDescendant<HomePageViewModel> (
+      builder: (context, child, model) {
+        if(model.isLoading) {
+          return LoadingState();
+        } else {
+          return Container(
+            child: Column(
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+                      child: CircleAvatar(
+                        radius: 110,
+                        backgroundColor: Colors.greenAccent,
+                        child: ClipOval(
+                          child: SizedBox(
+                            width: 200,
+                            height: 200,
+                            child: Image.network(
+                              model.overView.companyImage,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 30,
-          ),
-          Row(
-            children: <Widget>[
-              Expanded(
-                child: Container(
-                  color: Colors.black12,
-                  width: double.infinity,
-                  height: 2,
+                SizedBox(
+                  height: 30,
                 ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                child: Text(
-                  "Company Name: ",
-                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        color: Colors.black12,
+                        width: double.infinity,
+                        height: 2,
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                child: Text(
-                  "Bug Company ",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.purple,
-                      fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                      child: Text(
+                        "Company Name: ",
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                      child: Text(
+                        model.overView.companyName,
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.purple,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                child: Text(
-                  "Total Slice: ",
-                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                child: Text(
-                  "10,0000 ",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.purple,
-                      fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                      child: Text(
+                        "Total Slice: ",
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                      child: Text(
+                        model.overView.totalSlice.round().toString(),
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.purple,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                child: Text(
-                  "Cash per Slice: ",
-                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                child: Text(
-                  "500,000 vnd ",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.purple,
-                      fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                      child: Text(
+                        "Cash per Slice: ",
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                      child: Text(
+                        model.overView.cashPerSlice.round().toString() + " VND",
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.purple,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                child: Text(
-                  "Total Term: ",
-                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                child: Text(
-                  "4 ",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.purple,
-                      fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                      child: Text(
+                        "Total Term: ",
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                      child: Text(
+                        model.overView.totalTerm.toString(),
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.purple,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                child: Text(
-                  "Total StakeHolder: ",
-                  style: TextStyle(fontSize: 18, color: Colors.grey),
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              Container(
-                alignment: Alignment.centerLeft,
-                padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
-                child: Text(
-                  "10 ",
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.purple,
-                      fontWeight: FontWeight.bold),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                      child: Text(
+                        "Total StakeHolder: ",
+                        style: TextStyle(fontSize: 18, color: Colors.grey),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.fromLTRB(15, 20, 0, 0),
+                      child: Text(
+                        model.overView.totalStakeHolder.toString(),
+                        style: TextStyle(
+                            fontSize: 18,
+                            color: Colors.purple,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        ],
-      ),
+              ],
+            ),
+          );
+        }
+      },
     );
   }
 }
@@ -403,11 +424,9 @@ class TermView extends StatelessWidget {
         } else if (model.termList == null) {
           return NotFoundPage();
         } else {
-          return Expanded(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: _drawSlidable(context, model),
-            ),
+          return  Padding(
+            padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+            child: _drawSlidable(context, model),
           );
         }
       },
@@ -514,6 +533,7 @@ class ActiveView extends StatelessWidget {
               itemBuilder: (context, index) {
                 return GestureDetector(
                   onTap: () async {
+                    print(model.stakeHolderList.stakeholderList[index].shID);
                     await Navigator.push(
                       context,
                       MaterialPageRoute(

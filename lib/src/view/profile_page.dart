@@ -5,10 +5,10 @@ import 'package:slicingpieproject/src/viewmodel/stakeHolder_detail_viewmodel.dar
 
 import 'loading_page.dart';
 
-class StakeHolderDetaiPage extends StatelessWidget {
+class ProfilePage extends StatelessWidget {
   final StakeHolderDetailViewModel model;
 
-  StakeHolderDetaiPage({this.model});
+  ProfilePage({this.model});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +19,7 @@ class StakeHolderDetaiPage extends StatelessWidget {
           backgroundColor: Colors.blueAccent,
           centerTitle: true,
           title: new Text(
-            "StakeHolder Detail",
+            "Profile",
             textAlign: TextAlign.center,
           ),
         ),
@@ -63,7 +63,7 @@ class StakeHolderDetaiPage extends StatelessWidget {
                                 bool isUpdate = await model.updateStakeHolder();
                                 if (isUpdate) {
                                   Fluttertoast.showToast(
-                                    msg: "Update StakeHolder success",
+                                    msg: "Update Profile success",
                                     textColor: Colors.red,
                                     toastLength: Toast.LENGTH_SHORT,
                                     backgroundColor: Colors.white,
@@ -72,7 +72,7 @@ class StakeHolderDetaiPage extends StatelessWidget {
                                   Navigator.of(context).pop();
                                 } else {
                                   Fluttertoast.showToast(
-                                    msg: "Update StakeHolder fail",
+                                    msg: "Update Profile fail",
                                     textColor: Colors.red,
                                     toastLength: Toast.LENGTH_SHORT,
                                     backgroundColor: Colors.white,
@@ -82,49 +82,7 @@ class StakeHolderDetaiPage extends StatelessWidget {
                                 }
                               },
                               child: Text(
-                                "Update StakeHolder",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 18),
-                              ),
-                              color: Colors.red,
-                              shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(6)),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 80,
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(30, 30, 30, 0),
-                            child: RaisedButton(
-                              onPressed: () async {
-                                print(model.accountIDField.text);
-                                bool isDelete = await model.deleteStakeHolder(model.accountIDField.text);
-                                if (isDelete) {
-                                  Fluttertoast.showToast(
-                                    msg: "Delete StakeHolder success",
-                                    textColor: Colors.red,
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    backgroundColor: Colors.white,
-                                    gravity: ToastGravity.CENTER,
-                                  );
-                                  Navigator.of(context).pop();
-                                } else {
-                                  Fluttertoast.showToast(
-                                    msg: "Delete StakeHolder fail",
-                                    textColor: Colors.red,
-                                    toastLength: Toast.LENGTH_SHORT,
-                                    backgroundColor: Colors.white,
-                                    gravity: ToastGravity.CENTER,
-                                  );
-                                  Navigator.of(context).pop();
-                                }
-                              },
-                              child: Text(
-                                "Delete StakeHolder",
+                                "Update Profile",
                                 style: TextStyle(
                                     color: Colors.white, fontSize: 18),
                               ),
