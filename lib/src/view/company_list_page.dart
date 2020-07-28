@@ -37,7 +37,7 @@ class ListCompanyPage extends StatelessWidget {
                   builder: (context, child, model) {
                     if (model.isLoading) {
                       return LoadingState();
-                    } else if (model.companyList == null){
+                    } else if (model.companyList.companyList.isEmpty){
                       return NotFoundPage();
                     } else {
                       return Expanded(

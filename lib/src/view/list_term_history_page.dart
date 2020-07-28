@@ -38,7 +38,7 @@ class ListTermHistoryPage extends StatelessWidget {
                   builder: (context, child, model) {
                     if (model.isLoading) {
                       return LoadingState();
-                    } else if (model.termList == null){
+                    } else if (model.termList.termList.isEmpty){
                       return NotFoundPage();
                     } else {
                       return Expanded(

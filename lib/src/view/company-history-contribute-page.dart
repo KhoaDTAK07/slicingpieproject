@@ -29,7 +29,7 @@ class CompanyHistoryContributePage extends StatelessWidget {
             builder: (context, child, companyHistory) {
               if (companyHistory.isLoading == true) {
                 return LoadingState();
-              } else if (companyHistory.listContribute == null){
+              } else if (companyHistory.listContribute.isEmpty){
                 return NotFoundPage();
               } else
                 return Padding(

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:slicingpieproject/src/model/sign_in_google_model.dart';
 import 'package:slicingpieproject/src/view/companysetting_page.dart';
 import 'package:slicingpieproject/src/view/list_term_history_page.dart';
 import 'package:slicingpieproject/src/view/list_term_page.dart';
@@ -96,7 +97,7 @@ class HomePage extends StatelessWidget {
                               model: TermListViewModel(),
                             ),
                           ),
-                        );
+                        ).then((value) => model.loadListStakeHolderAfterChange());
                       },
                       leading: Icon(
                         Icons.supervisor_account,
@@ -165,6 +166,7 @@ class HomePage extends StatelessWidget {
                       onTap: () async {
                         final SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
                         await sharedPreferences.clear();
+                        signOutGoogle();
                         Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
                             LoginPage2(LoginViewModel2())), (Route<dynamic> route) => false);
                       },
