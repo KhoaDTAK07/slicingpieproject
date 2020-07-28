@@ -119,7 +119,7 @@ class HomePage extends StatelessWidget {
                                 model: CompanySettingViewModel(),
                               ),
                             ),
-                          );
+                          ).then((value) => model.loadListStakeHolderAfterChange());
                         } else {
                           Navigator.push(
                             context,
@@ -128,7 +128,7 @@ class HomePage extends StatelessWidget {
                                 model: CompanySettingViewModel(),
                               ),
                             ),
-                          );
+                          ).then((value) => model.loadListStakeHolderAfterChange());
                         }
                       },
                       leading: Icon(
